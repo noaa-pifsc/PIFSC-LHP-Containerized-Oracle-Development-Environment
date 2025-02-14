@@ -14,6 +14,9 @@ The DSC PIFSC Oracle Developer Environment (ODE) project was developed to provid
 -   ### DSC Version Control Information
     -   URL: https://picgitlab.nmfs.local/centralized-data-tools/pifsc-dsc
 
+## Prerequisites
+-   See the ODE [Prerequisites](https://picgitlab.nmfs.local/oracle-developer-environment/pifsc-oracle-developer-environment#prerequisites) for details
+
 ## Automated Preparation Process
 -   \*Note: The [prepare_docker_project.sh](./deployment_scripts/prepare_docker_project.sh) bash script retrieves the necessary files from the corresponding repositories and copies them into the docker image directory structure
 -   ### DSC Database Deployment
