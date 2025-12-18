@@ -6,15 +6,29 @@ The Centralized Utilities (CU) PIFSC Containerized Oracle Developer Environment 
 ## Resources
 -   ### CU CODE Version Control Information
     -   URL: https://github.com/noaa-pifsc/PIFSC-CU-Containerized-Oracle-Development-Environment
-    -   Version: 1.1 (git tag: CU_CODE_v1.0)
+    -   Version: 1.1 (git tag: CU_CODE_v1.1)
     -   Upstream repository:
         -   DSC CODE (DCODE) Version Control Information:
             -   URL: https://github.com/noaa-pifsc/PIFSC-DSC-Containerized-Oracle-Development-Environment
-            -   Version: 1.1 (git tag: DSC_CODE_v1.1)
+            -   Version: 1.2 (git tag: DSC_CODE_v1.2)
+
+## Dependencies
+\* Note: all dependencies are implemented as git submodules in the [modules](./modules) folder
+-   ### CU Version Control Information
+    -   Version Control Information:
+        -   URL: <git@picgitlab.nmfs.local:centralized-data-tools/centralized-utilities.git>
+        -   Database: 1.0 (Git tag: cen_utils_db_v1.0)
+-   ### DSC Version Control Information
+    -   Version Control Information:
+        -   URL: <git@picgitlab.nmfs.local:centralized-data-tools/pifsc-dsc.git>
+        -   Database: 1.1 (Git tag: dsc_db_v1.1)
+-   ### Container Deployment Scripts (CDS) Version Control Information
+    -   Version Control Information:
+        -   URL: <git@picgitlab.nmfs.local:centralized-data-tools/pifsc-container-deployment-scripts.git>
+        -   Database: 1.1 (Git tag: pifsc_container_deployment_scripts_v1.1)
+
 -   ### CU Version Control Information
     -   URL: https://picgitlab.nmfs.local/centralized-data-tools/centralized-utilities
--   ### DSC Version Control Information
-    -   URL: https://picgitlab.nmfs.local/centralized-data-tools/pifsc-dsc
 
 ## Prerequisites
 -   See the CODE [Prerequisites](https://github.com/noaa-pifsc/PIFSC-Containerized-Oracle-Development-Environment?tab=readme-ov-file#prerequisites) for details
@@ -27,11 +41,7 @@ The Centralized Utilities (CU) PIFSC Containerized Oracle Developer Environment 
 
 ## Automated Deployment Process
 -   ### Prepare the folder structure
-    -   See the CODE [Prepare the folder structure](https://github.com/noaa-pifsc/PIFSC-Containerized-Oracle-Development-Environment?tab=readme-ov-file#prepare-the-folder-structure) for details
-    -   #### DSC Preparation
-        -   The [SQL](https://picgitlab.nmfs.local/centralized-data-tools/pifsc-dsc/-/tree/main/SQL?ref_type=heads) folder is copied into a new "DSC" folder within the [docker/src](./docker/src) folder
-    -   #### CU Preparation
-        -   The [CU/SQL](https://picgitlab.nmfs.local/centralized-data-tools/centralized-utilities/-/tree/master/SQL?ref_type=heads) folder is copied into the [CU folder](./docker/src/CU) folder
+    -   Recursively clone the [CU CODE repository](#cu-code-version-control-information) to a working directory
 -   ### Build and Run the Containers 
     -   See the CODE [Build and Run the Containers](https://github.com/noaa-pifsc/PIFSC-Containerized-Oracle-Development-Environment?tab=readme-ov-file#build-and-run-the-containers) for details
     -   #### DSC Database Deployment
@@ -51,10 +61,15 @@ The Centralized Utilities (CU) PIFSC Containerized Oracle Developer Environment 
 
 ## Container Architecture
 -   See the CODE [container architecture documentation](https://github.com/noaa-pifsc/PIFSC-Containerized-Oracle-Development-Environment?tab=readme-ov-file/-/blob/main/README.md?ref_type=heads#container-architecture) for details
+-   ### CU CODE Customizations:
+    -   [docker/.env](./docker/.env) was updated to define an appropriate APP_SCHEMA_NAME value and to define the TARGET_APEX_VERSION value to fulfill a database dependency
+    -   [custom-docker-compose.yml](./docker/custom-docker-compose.yml) was updated to define CODE-specific mounted volume overrides 
+    -   [custom_db_app_deploy.sh](./docker/src/deployment_scripts/custom_db_app_deploy.sh) was updated to deploy the CU database schema
+    -   [custom_container_config.sh](./docker/src/deployment_scripts/config/custom_container_config.sh) was updated to define DB credentials and mounted volume file paths for the CU SQL scripts
 
 ## Connection Information
 -   See the CODE [connection information documentation](https://github.com/noaa-pifsc/PIFSC-Containerized-Oracle-Development-Environment?tab=readme-ov-file/-/blob/main/README.md?ref_type=heads#connection-information) for details
--   ### CU Database Connection Information
-    -   Connection information can be found in [create_docker_schemas.sql](https://picgitlab.nmfs.local/centralized-data-tools/centralized-utilities/-/blob/master/SQL/dev_container_setup/create_docker_schemas.sql?ref_type=heads)
 -   ### DSC Database Connection Information
     -   Connection information can be found in [create_docker_schemas.sql](https://picgitlab.nmfs.local/centralized-data-tools/pifsc-dsc/-/blob/main/SQL/dev_container_setup/create_docker_schemas.sql?ref_type=heads)
+-   ### CU Database Connection Information
+    -   Connection information can be found in [create_docker_schemas.sql](https://picgitlab.nmfs.local/centralized-data-tools/centralized-utilities/-/blob/master/SQL/dev_container_setup/create_docker_schemas.sql?ref_type=heads)
