@@ -9,12 +9,13 @@ The Life History Program (LHP) PIFSC Oracle Developer Environment (ODE) project 
     -   Version: 1.0 (git tag: LHP_CODE_v1.0)
     -   Upstream repository:
         -   CU ODE Version Control Information:
-            -   URL: https://picgitlab.nmfs.local/oracle-developer-environment/dsc-pifsc-oracle-developer-environment
-            -   Version: 1.1 (git tag: CU_ODE_v1.1)
+            -   URL: https://github.com/noaa-pifsc/PIFSC-CU-Containerized-Oracle-Development-Environment
+            -   Version: 1.2 (git tag: CU_CODE_v1.2)
 
 ## Dependencies
 \* Note: all dependencies are implemented as git submodules in the [modules](./modules) folder
 -   ### LHP Version Control Information
+    -   folder path: [modules/LHP](./modules/LHP) 
     -   Version Control Information:
         -   URL: git\@picgitlab.nmfs.local:lhp/lhp-data-management.git
         -   Version: 2.0 (git tag: lhp_data_mgmt_db_v2.0)
@@ -56,8 +57,9 @@ The Life History Program (LHP) PIFSC Oracle Developer Environment (ODE) project 
         -   [create_docker_schemas.sql](https://picgitlab.nmfs.local/centralized-data-tools/centralized-utilities/-/blob/master/SQL/dev_container_setup/create_docker_schemas.sql?ref_type=heads) is executed to create the CU schemas and roles
         -   [deploy_dev_container.sql](https://picgitlab.nmfs.local/centralized-data-tools/centralized-utilities/-/blob/master/SQL/automated_deployments/deploy_dev_container.sql?ref_type=heads) is executed with the CEN_UTILS schema to deploy the objects to the CEN_UTILS schema
     -   #### LHP Database Deployment
-        -   [create_docker_schemas.sql](https://picgitlab.nmfs.local/centralized-data-tools/centralized-utilities/-/blob/master/SQL/dev_container_setup/create_docker_schemas.sql?ref_type=heads) is executed to create the CU schemas and roles
-        -   [deploy_dev_container.sql](https://picgitlab.nmfs.local/centralized-data-tools/centralized-utilities/-/blob/master/SQL/automated_deployments/deploy_dev_container.sql?ref_type=heads) is executed with the CEN_UTILS schema to deploy the objects to the CEN_UTILS schema
+        -   [create_docker_schemas.sql](https://picgitlab.nmfs.local/lhp/lhp-data-management/-/blob/master/SQL/dev_container_setup/create_docker_schemas.sql?ref_type=heads) is executed to create the LHP schemas, roles, and Apex workspace
+        -   [deploy_dev_container.sql](https://picgitlab.nmfs.local/lhp/lhp-data-management/-/blob/master/SQL/automated_deployments/deploy_dev_container.sql?ref_type=heads) is executed with LIFEHIST to deploy the LHP data objects
+        -   [deploy_apex_dev_container.sql](https://picgitlab.nmfs.local/lhp/lhp-data-management/-/blob/master/SQL/automated_deployments/deploy_apex_dev_container.sql?ref_type=heads) is executed with LIFEHIST_APP to deploy the LHP Apex application
 
 ## Customization Process
 -   ### Implementation
@@ -70,10 +72,11 @@ The Life History Program (LHP) PIFSC Oracle Developer Environment (ODE) project 
 ## Container Architecture
 -   See the CODE [container architecture documentation](https://github.com/noaa-pifsc/PIFSC-Containerized-Oracle-Development-Environment?tab=readme-ov-file/-/blob/main/README.md?ref_type=heads#container-architecture) for details
 -   ### CU CODE Customizations:
-    -   [docker/.env](./docker/.env) was updated to define an appropriate APP_SCHEMA_NAME value and to define the TARGET_APEX_VERSION value to fulfill a database dependency
+    -   [docker/.env](./docker/.env) was updated to define an appropriate APP_SCHEMA_NAME value
+    -   [custom_deployment_functions.sh](./deployment_scripts/functions/custom_deployment_functions.sh) was updated to add the [CODE-ords.yml](./docker/CODE-ords.yml) configuration file to enable the ords container
     -   [custom-docker-compose.yml](./docker/custom-docker-compose.yml) was updated to define CODE-specific mounted volume overrides 
-    -   [custom_db_app_deploy.sh](./docker/src/deployment_scripts/custom_db_app_deploy.sh) was updated to deploy the CU database schema
-    -   [custom_container_config.sh](./docker/src/deployment_scripts/config/custom_container_config.sh) was updated to define DB credentials and mounted volume file paths for the CU SQL scripts
+    -   [custom_db_app_deploy.sh](./docker/src/deployment_scripts/custom_db_app_deploy.sh) was updated to deploy the LHP database schemas and the Apex app
+    -   [custom_container_config.sh](./docker/src/deployment_scripts/config/custom_container_config.sh) was updated to define DB credentials and mounted volume file paths for the LHP SQL scripts
 
 ## Connection Information
 -   See the CODE [connection information documentation](https://github.com/noaa-pifsc/PIFSC-Containerized-Oracle-Development-Environment?tab=readme-ov-file/-/blob/main/README.md?ref_type=heads#connection-information) for details
@@ -81,3 +84,5 @@ The Life History Program (LHP) PIFSC Oracle Developer Environment (ODE) project 
     -   Connection information can be found in [create_docker_schemas.sql](https://picgitlab.nmfs.local/centralized-data-tools/pifsc-dsc/-/blob/main/SQL/dev_container_setup/create_docker_schemas.sql?ref_type=heads)
 -   ### CU Database Connection Information
     -   Connection information can be found in [create_docker_schemas.sql](https://picgitlab.nmfs.local/centralized-data-tools/centralized-utilities/-/blob/master/SQL/dev_container_setup/create_docker_schemas.sql?ref_type=heads)
+-   ### LHP Database Connection Information
+    -   Connection information can be found in [create_docker_schemas.sql](https://picgitlab.nmfs.local/lhp/lhp-data-management/-/blob/master/SQL/dev_container_setup/create_docker_schemas.sql?ref_type=heads)

@@ -22,3 +22,23 @@ CU_CREDENTIALS="$DB_CU_USER/$DB_CU_PASSWORD@${DBHOST}:${DBPORT}/${DBSERVICENAME}
 
 # define the CU database folder path
 CU_FOLDER_PATH="/usr/src/CU/SQL"
+
+
+# define LHP schema credentials
+DB_LHP_USER="LIFEHIST"
+DB_LHP_PASSWORD="[CONTAINER_PW]"
+
+# define LHP connection string
+LHP_CREDENTIALS="$DB_LHP_USER/$DB_LHP_PASSWORD@${DBHOST}:${DBPORT}/${DBSERVICENAME}"
+
+
+# define LHP APP schema credentials
+DB_LHP_APP_USER="LIFEHIST_APP"
+DB_LHP_APP_PASSWORD="[CONTAINER_PW]"
+
+# define LHP APP connection string
+LHP_APP_CREDENTIALS="$DB_LHP_APP_USER/$DB_LHP_APP_PASSWORD@${DBHOST}:${DBPORT}/${DBSERVICENAME}"
+
+
+# define the LHP database folder path
+LHP_FOLDER_PATH="/usr/src/LHP/SQL"
