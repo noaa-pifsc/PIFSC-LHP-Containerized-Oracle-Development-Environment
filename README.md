@@ -1,34 +1,40 @@
-# PIFSC Centralized Utilities Containerized Oracle Developer Environment
+# PIFSC Life History Program Containerized Oracle Developer Environment
 
 ## Overview
-The Centralized Utilities (CU) PIFSC Containerized Oracle Developer Environment (CODE) project was developed to provide a custom containerized Oracle development environment for the CU.  This repository can be forked to extend the existing functionality to any data systems that depend on the CU for both development and testing purposes.  
+The Life History Program (LHP) PIFSC Oracle Developer Environment (ODE) project was developed to provide a custom containerized Oracle development environment for the LHP project.  This repository can be forked to extend the existing functionality to any data systems that depend on the LHP project for both development and testing purposes
 
 ## Resources
--   ### CU CODE Version Control Information
-    -   URL: https://github.com/noaa-pifsc/PIFSC-CU-Containerized-Oracle-Development-Environment
-    -   Version: 1.1 (git tag: CU_CODE_v1.1)
+-   ### LHP CODE Version Control Information
+    -   URL: https://github.com/noaa-pifsc/PIFSC-LHP-Containerized-Oracle-Development-Environment
+    -   Version: 1.0 (git tag: LHP_CODE_v1.0)
     -   Upstream repository:
-        -   DSC CODE (DCODE) Version Control Information:
-            -   URL: https://github.com/noaa-pifsc/PIFSC-DSC-Containerized-Oracle-Development-Environment
-            -   Version: 1.2 (git tag: DSC_CODE_v1.2)
+        -   CU ODE Version Control Information:
+            -   URL: https://github.com/noaa-pifsc/PIFSC-CU-Containerized-Oracle-Development-Environment
+            -   Version: 1.2 (git tag: CU_CODE_v1.2)
 
 ## Dependencies
 \* Note: all dependencies are implemented as git submodules in the [modules](./modules) folder
+-   ### LHP Version Control Information
+    -   folder path: [modules/LHP](./modules/LHP) 
+    -   Version Control Information:
+        -   URL: git\@picgitlab.nmfs.local:lhp/lhp-data-management.git
+        -   Version: 2.0 (git tag: lhp_data_mgmt_db_v2.0)
+        -   Application: 2.0 (git tag: lhp_data_mgmt_app_v2.0)
 -   ### CU Version Control Information
+    -   folder path: [modules/CU](./modules/CU) 
     -   Version Control Information:
         -   URL: <git@picgitlab.nmfs.local:centralized-data-tools/centralized-utilities.git>
         -   Database: 1.0 (Git tag: cen_utils_db_v1.0)
 -   ### DSC Version Control Information
+    -   folder path: [modules/DSC](./modules/DSC) 
     -   Version Control Information:
         -   URL: <git@picgitlab.nmfs.local:centralized-data-tools/pifsc-dsc.git>
         -   Database: 1.1 (Git tag: dsc_db_v1.1)
 -   ### Container Deployment Scripts (CDS) Version Control Information
+    -   folder path: [modules/CDS](./modules/CDS) 
     -   Version Control Information:
         -   URL: <git@picgitlab.nmfs.local:centralized-data-tools/pifsc-container-deployment-scripts.git>
         -   Database: 1.1 (Git tag: pifsc_container_deployment_scripts_v1.1)
-
--   ### CU Version Control Information
-    -   URL: https://picgitlab.nmfs.local/centralized-data-tools/centralized-utilities
 
 ## Prerequisites
 -   See the CODE [Prerequisites](https://github.com/noaa-pifsc/PIFSC-Containerized-Oracle-Development-Environment?tab=readme-ov-file#prerequisites) for details
@@ -41,7 +47,7 @@ The Centralized Utilities (CU) PIFSC Containerized Oracle Developer Environment 
 
 ## Automated Deployment Process
 -   ### Prepare the folder structure
-    -   Recursively clone the [CU CODE repository](#cu-code-version-control-information) to a working directory
+    -   Recursively clone the [LHP CODE repository](#lhp-code-version-control-information) to a working directory
 -   ### Build and Run the Containers 
     -   See the CODE [Build and Run the Containers](https://github.com/noaa-pifsc/PIFSC-Containerized-Oracle-Development-Environment?tab=readme-ov-file#build-and-run-the-containers) for details
     -   #### DSC Database Deployment
@@ -50,6 +56,10 @@ The Centralized Utilities (CU) PIFSC Containerized Oracle Developer Environment 
     -   #### CU Database Deployment
         -   [create_docker_schemas.sql](https://picgitlab.nmfs.local/centralized-data-tools/centralized-utilities/-/blob/master/SQL/dev_container_setup/create_docker_schemas.sql?ref_type=heads) is executed to create the CU schemas and roles
         -   [deploy_dev_container.sql](https://picgitlab.nmfs.local/centralized-data-tools/centralized-utilities/-/blob/master/SQL/automated_deployments/deploy_dev_container.sql?ref_type=heads) is executed with the CEN_UTILS schema to deploy the objects to the CEN_UTILS schema
+    -   #### LHP Database Deployment
+        -   [create_docker_schemas.sql](https://picgitlab.nmfs.local/lhp/lhp-data-management/-/blob/master/SQL/dev_container_setup/create_docker_schemas.sql?ref_type=heads) is executed to create the LHP schemas, roles, and Apex workspace
+        -   [deploy_dev_container.sql](https://picgitlab.nmfs.local/lhp/lhp-data-management/-/blob/master/SQL/automated_deployments/deploy_dev_container.sql?ref_type=heads) is executed with LIFEHIST to deploy the LHP data objects
+        -   [deploy_apex_dev_container.sql](https://picgitlab.nmfs.local/lhp/lhp-data-management/-/blob/master/SQL/automated_deployments/deploy_apex_dev_container.sql?ref_type=heads) is executed with LIFEHIST_APP to deploy the LHP Apex application
 
 ## Customization Process
 -   ### Implementation
@@ -62,10 +72,11 @@ The Centralized Utilities (CU) PIFSC Containerized Oracle Developer Environment 
 ## Container Architecture
 -   See the CODE [container architecture documentation](https://github.com/noaa-pifsc/PIFSC-Containerized-Oracle-Development-Environment?tab=readme-ov-file/-/blob/main/README.md?ref_type=heads#container-architecture) for details
 -   ### CU CODE Customizations:
-    -   [docker/.env](./docker/.env) was updated to define an appropriate APP_SCHEMA_NAME value and to define the TARGET_APEX_VERSION value to fulfill a database dependency
+    -   [docker/.env](./docker/.env) was updated to define an appropriate APP_SCHEMA_NAME value
+    -   [custom_deployment_functions.sh](./deployment_scripts/functions/custom_deployment_functions.sh) was updated to add the [CODE-ords.yml](./docker/CODE-ords.yml) configuration file to enable the ords container
     -   [custom-docker-compose.yml](./docker/custom-docker-compose.yml) was updated to define CODE-specific mounted volume overrides 
-    -   [custom_db_app_deploy.sh](./docker/src/deployment_scripts/custom_db_app_deploy.sh) was updated to deploy the CU database schema
-    -   [custom_container_config.sh](./docker/src/deployment_scripts/config/custom_container_config.sh) was updated to define DB credentials and mounted volume file paths for the CU SQL scripts
+    -   [custom_db_app_deploy.sh](./docker/src/deployment_scripts/custom_db_app_deploy.sh) was updated to deploy the LHP database schemas and the Apex app
+    -   [custom_container_config.sh](./docker/src/deployment_scripts/config/custom_container_config.sh) was updated to define DB credentials and mounted volume file paths for the LHP SQL scripts
 
 ## Connection Information
 -   See the CODE [connection information documentation](https://github.com/noaa-pifsc/PIFSC-Containerized-Oracle-Development-Environment?tab=readme-ov-file/-/blob/main/README.md?ref_type=heads#connection-information) for details
@@ -73,3 +84,11 @@ The Centralized Utilities (CU) PIFSC Containerized Oracle Developer Environment 
     -   Connection information can be found in [create_docker_schemas.sql](https://picgitlab.nmfs.local/centralized-data-tools/pifsc-dsc/-/blob/main/SQL/dev_container_setup/create_docker_schemas.sql?ref_type=heads)
 -   ### CU Database Connection Information
     -   Connection information can be found in [create_docker_schemas.sql](https://picgitlab.nmfs.local/centralized-data-tools/centralized-utilities/-/blob/master/SQL/dev_container_setup/create_docker_schemas.sql?ref_type=heads)
+-   ### LHP Database Connection Information
+    -   Connection information can be found in [create_docker_schemas.sql](https://picgitlab.nmfs.local/lhp/lhp-data-management/-/blob/master/SQL/dev_container_setup/create_docker_schemas.sql?ref_type=heads)
+
+## License
+See the [LICENSE.md](./LICENSE.md) for details
+
+## Disclaimer
+This repository is a scientific product and is not official communication of the National Oceanic and Atmospheric Administration, or the United States Department of Commerce. All NOAA GitHub project code is provided on an ‘as is’ basis and the user assumes responsibility for its use. Any claims against the Department of Commerce or Department of Commerce bureaus stemming from the use of this GitHub project will be governed by all applicable Federal law. Any reference to specific commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply their endorsement, recommendation or favoring by the Department of Commerce. The Department of Commerce seal and logo, or the seal and logo of a DOC bureau, shall not be used in any manner to imply endorsement of any commercial product or activity by DOC or the United States Government.

@@ -58,4 +58,40 @@ $CU_CREDENTIALS
 EOF
 
 	echo "The CU objects were created"
+
+
+	# change the directory so the script can run without alterations
+	cd ${LHP_FOLDER_PATH}
+
+# create the LIFEHIST schema(s)
+sqlplus -s /nolog <<EOF
+@dev_container_setup/create_docker_schemas.sql
+$SYS_CREDENTIALS
+EOF
+
+
+
+	echo "Create the LIFEHIST objects"
+
+# run the container database deployment script
+sqlplus -s /nolog <<EOF
+@automated_deployments/deploy_dev_container.sql
+$LHP_CREDENTIALS
+EOF
+
+	echo "The LIFEHIST objects were created"
+
+
+	echo "Create the LIFEHIST_APP objects"
+
+# run the container APEX app deployment script
+sqlplus -s /nolog <<EOF
+@automated_deployments/deploy_apex_dev_container.sql
+$LHP_APP_CREDENTIALS
+EOF
+
+	echo "The LIFEHIST_APP objects were created"
+
+
+
 echo "custom deployment scripts have completed successfully"
