@@ -6,3 +6,4 @@ services:
       - ../modules/CU/SQL:/usr/src/CU/SQL
       - ../modules/LHP/SQL:/usr/src/LHP/SQL
       - ../modules/LHP/application_code:/usr/src/LHP/application_code
+      - ../modules/LHP/docs/location_hierarchy:/usr/src/LHP/docs/location_hierarchy
