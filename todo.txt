@@ -31,12 +31,13 @@ git bash commands:
 	# Dev:
 
 		# stop and remove CODE containers and delete volumes
-		cd /c/Users/jesse.abdul/Documents/Version\ Control/Git/PIFSC-CU-Containerized-Oracle-Development-Environment
+		cd /c/Users/jesse.abdul/Documents/Version\ Control/Git/PIFSC-LHP-Containerized-Oracle-Development-Environment
 		
 		docker compose \
 		  --env-file ./docker/.env \
 		  -f docker/CODE-db-deploy.yml \
 		  -f docker/CODE-db-named-volume.yml \
+		  -f docker/CODE-ords.yml \
 		  -f docker/custom-docker-compose.yml \
 		  down -v
 
@@ -47,11 +48,12 @@ git bash commands:
 	# Test:
 
 		# stop and remove CODE containers and delete volumes
-		cd /c/Users/jesse.abdul/Documents/Version\ Control/Git/PIFSC-CU-Containerized-Oracle-Development-Environment
+		cd /c/Users/jesse.abdul/Documents/Version\ Control/Git/PIFSC-LHP-Containerized-Oracle-Development-Environment
 		
 		docker compose \
 		  --env-file ./docker/.env \
 		  -f docker/CODE-db-deploy.yml \
+		  -f docker/CODE-ords.yml \
 		  -f docker/custom-docker-compose.yml \
 		  down -v
 
