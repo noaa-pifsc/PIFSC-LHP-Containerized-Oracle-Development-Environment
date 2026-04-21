@@ -8,3 +8,6 @@ HOST_SOURCE_PATH="/tmp/CODE"
 
 # define the privileged container user
 PRIV_USER="docker-user"
+
+# define the container git project URL
+GIT_URL="git@github.com:noaa-pifsc/PIFSC-Containerized-Oracle-Development-Environment.git"

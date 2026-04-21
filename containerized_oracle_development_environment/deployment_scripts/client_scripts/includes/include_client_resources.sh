@@ -15,6 +15,7 @@ source "${CURR_DIR}/../../../../modules/CDD/src/includes/load_CDD_client_resourc
 # include the container configuration variables
 source "${CURR_DIR}/../../config/container_config.sh"
 source "${CURR_DIR}/../../config/custom_container_config.sh"
+source "${CURR_DIR}/../../config/server_deploy_config.sh"
 
 # include the custom shared/host function definitions
 source "${CURR_DIR}/../functions/client_functions.sh"
