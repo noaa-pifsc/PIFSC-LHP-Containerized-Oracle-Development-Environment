@@ -32,8 +32,24 @@ to do:
 		
 	X replace the way the apex_version_compare	
 		
+		
+		
+	4/20/26:
+		Working on implementing the host deployment for CODE, need to pass/parse STDIN. 
+			Try to use CDD as the starting point
+				It encodes/decodes STDIN, it does not use secrets, it does not use docker stack so it is probably the most well-suited for this
+					host_deploy_CODE.sh: proj_host_deploy_container()
+						model after host_deploy_database.sh
+					host_deploy_CODE_elev_privs.sh: proj_host_deploy_container_elev_privs()
+						model after host_deploy_database_elev_privs.sh
+
+					cdd_host_deploy_database_execute_container_script() was copied and modified in proj_
+
+
+		
 	documentation:
 		need to sync up the SECRET_MAPPING_ARR and .env file secrets
+		create server_deploy_config.sh in deployment_scripts/config using the server_deploy_config.template.sh
 
 git bash commands:
 

@@ -10,6 +10,10 @@
 	# determine where the designated container subfolder in the local filesystem is (/containerized_oracle_development_environment):
 	BUILD_PATH="${CONFIG_DIR}/../../"
 
+	# define the path to the folder where the host bash scripts are contained
+	HOST_SCRIPTS_PATH="${HOST_SOURCE_PATH}/containerized_oracle_development_environment/deployment_scripts/host_scripts"
+
+
 ##### Container Project Configuration Variables: #####
 
 	#declare a variable to store the name of the configuration data variable that is passed via STDIN that contains secret values

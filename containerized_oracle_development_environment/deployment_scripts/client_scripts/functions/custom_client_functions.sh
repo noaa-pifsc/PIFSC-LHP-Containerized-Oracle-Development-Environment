@@ -19,7 +19,6 @@ function proj_client_build_deploy_dev_environment ()
 	# change to the defined build_path so the docker commands can be run relative to the build path directory
 	cd "${BUILD_PATH}"
 	
-	
 	# Determine the correct OS path separator for the COMPOSE_FILE environment variable for linux server deployments and for local Mac/Linux deployments
 	local compose_sep=":"
 
@@ -67,19 +66,25 @@ function proj_client_build_deploy_dev_environment ()
 		# load the server deploy configuration file (defines the HOSTNAME variable)
 		source "${CONFIG_DIR}/server_deploy_config.sh"
 
-		# Define array for remote deployment using the CDS standard vocabulary
-		local -A remote_deploy_args=(
-			["container_hostname"]="${HOSTNAME}"
-			["container_host_project_path"]="${CONTAINER_HOST_SOURCE_PATH}"
-			["container_git_url"]="${GIT_URL}"
-			["config_data_var_name"]="CONFIG_DATA"
-			["secret_mapping_var_name"]="${SECRET_MAPPING_VAR_NAME}"
-			["parse_config_data"]="yes"
-			# include the COMPOSE_FILE variable to the remote host natively
-			["remote_ssh_cmd"]="export COMPOSE_FILE='${COMPOSE_FILE}'; bash ${CONTAINER_HOST_SOURCE_PATH}/containerized_oracle_development_environment/deployment_scripts/host_scripts/host_deploy_CODE.sh"
-		)
 
-		# Route to the remote deployment engine
+		# validate the bash variable values
+		if ! cds_shared_validate_required_vars "CONFIG_DIR" "HOSTNAME" "HOST_SOURCE_PATH" "GIT_URL" "HOST_SCRIPTS_PATH" "SECRET_DATA_VAR_NAME" "SECRET_MAPPING_VAR_NAME"; then
+			echo "Error: proj_client_build_deploy_dev_environment() function required bash variable validation for server deployments failed" >&2
+			return 1
+		fi
+
+		# declare the function arguments
+		local -A remote_deploy_args=(
+				["target_host"]="${HOSTNAME}"
+				["source_path"]="${HOST_SOURCE_PATH}"
+				["git_url"]="${GIT_URL}"
+				["ssh_cmd"]="$(proj_client_generate_ssh_env_vars "${ENV_NAME}" "${COMPOSE_FILE}") bash ${HOST_SCRIPTS_PATH}/host_deploy_CODE.sh"
+				["secret_var"]="${SECRET_DATA_VAR_NAME}"
+				["secret_map"]="${SECRET_MAPPING_VAR_NAME}"
+				["process_secrets"]="yes"
+			)
+		
+		# deploy the database to the remote server
 		cds_client_execute_remote_deployment "remote_deploy_args"
 	fi
 }
