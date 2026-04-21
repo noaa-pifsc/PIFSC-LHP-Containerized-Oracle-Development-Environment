@@ -45,6 +45,8 @@ function proj_client_build_deploy_dev_environment ()
 			return 1
 		fi
 
+		echo "The value of HOST_SCRIPTS_PATH is: ${HOST_SCRIPTS_PATH}"
+
 		# declare the function arguments
 		local -A remote_deploy_args=(
 				["target_host"]="${HOSTNAME}"
@@ -55,6 +57,8 @@ function proj_client_build_deploy_dev_environment ()
 				["secret_map"]="${SECRET_MAPPING_VAR_NAME}"
 				["process_secrets"]="yes"
 			)
+			
+		echo "the function arguments are: $(cds_shared_dump_array_vals "remote_deploy_args")"
 		
 		echo "deploy the database to the remote server by running cds_client_execute_remote_deployment()"
 		
