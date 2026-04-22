@@ -1,0 +1,10 @@
+# Use official Oracle ORDS image
+
+ARG ORDS_IMAGE
+FROM ${ORDS_IMAGE}
+
+# create the global configuration directory if it doesn't exist:
+mkdir -p /etc/ords/config/global
+
+# copy baseline ORDS settings into the image and grant ownership to the Oracle user (54321)
+COPY --chown=54321:0 ./ords-config/global/settings.xml /etc/ords/config/global/settings.xml
