@@ -9,8 +9,8 @@
 # determine current folder path (containerized_oracle_development_environment/deployment_scripts/container_scripts/includes)
 CURR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# include the CDD/CDS shared/container functions
-source "${CURR_DIR}/../../../../modules/CDD/src/includes/load_CDD_container_resources.sh"
+# include the CDS shared functions
+source "${CURR_DIR}/../../../../modules/CDS/src/CDS_shared_functions.sh"
 
 # include the container configuration variables
 source "${CURR_DIR}/../../config/container_config.sh"

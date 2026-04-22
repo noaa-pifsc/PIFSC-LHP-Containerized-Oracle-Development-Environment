@@ -12,8 +12,9 @@ CURR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # load the environment variables
 source "${CURR_DIR}/../../../.env"
 
-# include the CDD/CDS shared/client functions
-source "${CURR_DIR}/../../../../modules/CDD/src/includes/load_CDD_client_resources.sh"
+# include the CDS shared/client functions
+source "${CURR_DIR}/../../../../modules/CDS/src/CDS_shared_functions.sh"
+source "${CURR_DIR}/../../../../modules/CDS/src/CDS_client_functions.sh"
 
 # include the container configuration variables
 source "${CURR_DIR}/../../config/container_config.sh"
