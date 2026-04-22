@@ -54,14 +54,14 @@ function proj_client_build_deploy_dev_environment ()
 				["process_secrets"]="yes"
 			)
 			
-		echo "deploy the database to the host server"
+		echo "deploy the containers to the host server"
 		
-		# deploy the database to the remote server
+		# deploy the containers to the remote server
 		cds_client_execute_remote_deployment "remote_deploy_args"
 	fi
 }
 
-# function to define the ssh environment variables for the database deployment server bash script
+# function to define the ssh environment variables for the container deployment server bash script
 # Accepts the following parameters: 
 # 1: the environment name
 function proj_client_generate_ssh_env_vars ()
@@ -113,9 +113,9 @@ function proj_construct_compose_file_string ()
 	# include the code-db and code-db-ords-deploy services, and custom docker compose to integrate additional services
 	out_compose_file_ref="./CODE-db-deploy.yml${compose_sep}./custom-docker-compose.yml"
 
-	# check if this is intended for a dev environment (retain database and ords volumes across container restarts) 
+	# check if this is intended for a dev environment (retain the database volume across container restarts) 
 	if [ "${env_name}" == "dev" ]; then
-		# add in the named volume for the db service
+		# add in the named volume for the code-db service
 		out_compose_file_ref="${out_compose_file_ref}${compose_sep}./CODE-db-named-volume.yml"
 	fi
 	
@@ -124,5 +124,4 @@ function proj_construct_compose_file_string ()
 		# include the ORDS service
 		out_compose_file_ref="${out_compose_file_ref}${compose_sep}./CODE-ords.yml"
 	fi
-
 }

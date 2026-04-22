@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# define a list of configuration variables that drive the behavior of the database container deployment scripts 
+# define a list of configuration variables that drive the behavior of the container deployment scripts 
 
 ##### Container Configuration Variables: #####
 
