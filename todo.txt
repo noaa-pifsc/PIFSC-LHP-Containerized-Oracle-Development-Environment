@@ -15,13 +15,15 @@ to do:
 	X try to reuse CAD for server deployments
 
 		
-	_ try to get CODE running on a linux host
-		_ resolving issue with mounted volume on a linux host (switch to named volume)
+	X try to get CODE running on a linux host
+		X resolving issue with mounted volume on a linux host (switch to named volume)
 	
 	
 	_ how to guarantee unique container naming so multiple CODE projects can run on the same server at the same time
 		_ need to also change the port number to avoid conflicts
-		
+		_ needs to be updated in .env file
+
+	
 		
 	X use array arguments for CODE functions
 		_ passthrough the argument arrays to functions from within functions when appropriate
@@ -76,20 +78,20 @@ git bash commands:
 		# stop and remove CODE containers and delete volumes
 		cd /c/Users/jesse.abdul/Documents/Version\ Control/Git/PIFSC-Containerized-Oracle-Development-Environment/containerized_oracle_development_environment
 		
-		# shutdown all containers and delete all associated volumes too
-		docker compose \
-		  --env-file ./.env \
-		  -f CODE-db-deploy.yml \
-		  -f CODE-ords.yml \
-		  -f CODE-db-named-volume.yml \
-		  -f custom-docker-compose.yml \
-		  down
-		docker volume rm code-apex-static-vol
-		docker volume rm code-db-vol
+# shutdown all containers and delete all associated volumes too
+docker compose \
+  --env-file ./.env \
+  -f CODE-db-deploy.yml \
+  -f CODE-ords.yml \
+  -f CODE-db-named-volume.yml \
+  -f custom-docker-compose.yml \
+  down
+docker volume rm code-apex-static-vol
+docker volume rm code-db-vol
 
 
 
-		# shutdown all containers and retain named volumes
+# shutdown all containers and retain named volumes
 docker compose \
 --env-file ./.env \
 -f CODE-db-deploy.yml \

@@ -23,8 +23,6 @@ function proj_deploy_CODE_containers ()
 	# declare COMPOSE_FILE as an environment variable
 	export COMPOSE_FILE="${compose_file}"
 
-	echo "the value of COMPOSE_FILE is: ${COMPOSE_FILE}"
-
 	# remove the containers if they are already running
 	docker compose --env-file ./.env down
 

@@ -14,7 +14,7 @@ declare ORDS_ENABLED="yes"
 declare SOURCE_FOLDER_NAME="CODE_JDA"
 
 # define the container git project URL
-declare GIT_URL="--branch Branch_CODE_v1.4_CDD_install git@github.com:noaa-pifsc/PIFSC-Containerized-Oracle-Development-Environment.git"
+declare GIT_URL="git@github.com:noaa-pifsc/PIFSC-Containerized-Oracle-Development-Environment.git"
 
 # define the container server hostname configuration information
 declare HOSTNAME="pifsc-dev-docker-01-as"
