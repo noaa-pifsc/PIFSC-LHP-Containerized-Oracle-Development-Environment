@@ -1,3 +1,10 @@
+#!/bin/bash
+
+#-----------------------------------------------------------------------------
+# shared_functions.sh:
+# this file defines shared functions that are used for this specific 
+# container application for container deployments
+#-----------------------------------------------------------------------------
 
 # function to deploy the CODE containers
 function proj_deploy_CODE_containers ()
@@ -23,4 +30,19 @@ function proj_deploy_CODE_containers ()
 
 	# Execute natively for local Desktop Deployments using the injected COMPOSE_FILE
 	docker compose --env-file ./.env up -d --build
+}
+
+
+# function that defines the environment variable bash block that will define the environment variables for inclusion when the build/run container bash scripts execute
+# Accepts 2 parameters: 
+# 1: the environment name
+# 2: the compose path include file string
+function proj_shared_define_env_vars_block()
+{
+	local env_name="${1}"
+	local compose_file="${2}"
+
+	# echo the strictly local runtime variables natively
+	echo "export ENV_NAME='${env_name}'"
+	echo "export COMPOSE_FILE='${compose_file}'"
 }
