@@ -3,4 +3,5 @@
 
 # allow-list directories (allow the directory and its contents)
 !containerized_oracle_development_environment/deployment_scripts/**
+!containerized_oracle_development_environment/ords-config/**
 !modules/CDD/**
