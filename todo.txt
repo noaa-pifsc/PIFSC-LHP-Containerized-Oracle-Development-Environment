@@ -36,6 +36,8 @@ to do:
 			* Not security hardened, encouraged not to work with sensitive data in a shared environment (anyone with docker privileges can connect to your containers and access the data within it)
 			
 		
+		_ the custom_container_config.sh configuration that is stored on the client machine is used when deploying to the server (passed via environment variables)
+		
 		
 	
 	_ update documentation
@@ -69,6 +71,10 @@ to do:
 	_ how to guarantee unique container naming so multiple CODE projects can run on the same server at the same time
 		_ need to also change the port number to avoid conflicts
 			_ make the updates custom_container_config.sh
+				COMPOSE_PROJECT_NAME
+				DB_HOST_PORT
+				ORDS_HOST_PORT
+
 
 		_ test concurrent CODE instances on docker host
 		

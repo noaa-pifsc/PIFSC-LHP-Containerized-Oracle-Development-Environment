@@ -2,12 +2,13 @@
 
 ##### Container Configuration Variables: #####
 
-	# declare the project name, this must be unique to run more than one instance of CODE on a given container host machine
-	declare COMPOSE_PROJECT_NAME=code_base
+	# Container Variables That Must Be Unique For A Given Code Implementation To Allow Concurrent Runs
+		# declare the project name, this must be unique to run more than one instance of CODE on a given container host machine, this will determine the container name and the folder name for the working copy of the repository on the server
+		declare COMPOSE_PROJECT_NAME=code_base
 
-	#--- Container Port Configuration ---
-	declare DB_HOST_PORT=1521
-	declare ORDS_HOST_PORT=8181
+		#--- Container Port Configuration ---
+		declare DB_HOST_PORT=1521
+		declare ORDS_HOST_PORT=8181
 
 	#--- Container Image Configuration ---
 	declare DB_IMAGE=container-registry.oracle.com/database/free:latest
@@ -26,7 +27,7 @@
 ##### Project Configuration Variables: #####
 
 	# define the container git project URL
-	declare GIT_URL="--branch Branch_CODE_v1.4_CDD_install git@github.com:noaa-pifsc/PIFSC-Containerized-Oracle-Development-Environment.git"
+	declare GIT_URL="git@github.com:noaa-pifsc/PIFSC-Containerized-Oracle-Development-Environment.git"
 
 ##### Container Host Configuration Variables: #####
 
@@ -35,10 +36,3 @@
 
 	# define the container server hostname configuration information
 	declare HOSTNAME="pifsc-dev-docker-01-as"
-	
-##### Container Secret Configuration Variables: #####
-
-	# declare an associative array with the secret name as the array element and the bash variable name as the array value, the array element values should match the variable names in secrets.sh
-	declare -A SECRET_MAPPING_ARR=(
-		["sys_password"]="ORACLE_PWD"
-	)
