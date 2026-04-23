@@ -74,7 +74,7 @@ function proj_client_build_deploy_dev_environment ()
 		echo "This is a local deployment"
 
 		# export the environment variables used directly in the docker compose files:
-		cds_shared_export_env_vars "COMPOSE_PROJECT_NAME" "DB_HOST_PORT" "ORDS_HOST_PORT" "DB_IMAGE" "ORDS_IMAGE" "TARGET_APEX_VERSION" "APP_SCHEMA_NAME" "ORACLE_PWD" "COMPOSE_FILE" "DBPORT" "DBHOST" "DBSERVICENAME"
+		cds_shared_export_env_vars "COMPOSE_PROJECT_NAME" "DB_HOST_PORT" "ORDS_HOST_PORT" "DB_IMAGE" "ORDS_IMAGE" "TARGET_APEX_VERSION" "APP_SCHEMA_NAME" "ORACLE_PWD" "DBPORT" "DBHOST" "DBSERVICENAME"
 
 		# deploy the containers locally:
 		proj_shared_deploy_CODE_containers "${BUILD_PATH}" "${compose_file}"
@@ -243,7 +243,7 @@ function proj_client_shutdown_dev_environment ()
 		echo "This is a local deployment"
 
 		# export the environment variables used directly in the docker compose files:
-		cds_shared_export_env_vars "COMPOSE_PROJECT_NAME" "DB_HOST_PORT" "ORDS_HOST_PORT" "DB_IMAGE" "ORDS_IMAGE" "TARGET_APEX_VERSION" "APP_SCHEMA_NAME" "ORACLE_PWD" "COMPOSE_FILE" "DBPORT" "DBHOST" "DBSERVICENAME"
+		cds_shared_export_env_vars "COMPOSE_PROJECT_NAME" "DB_HOST_PORT" "ORDS_HOST_PORT" "DB_IMAGE" "ORDS_IMAGE" "TARGET_APEX_VERSION" "APP_SCHEMA_NAME" "COMPOSE_FILE" "DBPORT" "DBHOST" "DBSERVICENAME"
 
 		# deploy the containers locally:
 		proj_shared_shutdown_CODE_containers "${BUILD_PATH}" "${compose_file}" "${rem_vol}"
