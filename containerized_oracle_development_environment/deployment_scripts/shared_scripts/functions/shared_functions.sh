@@ -23,8 +23,9 @@ function proj_deploy_CODE_containers ()
 	# declare COMPOSE_FILE as an environment variable
 	export COMPOSE_FILE="${compose_file}"
 
-	# export ORACLE_PWD so it can be used for the code-db and code-ords containers
+	# export ORACLE_PWD and COMPOSE_PROJECT_NAME so they can be used for the code-db and code-ords containers
 	export ORACLE_PWD
+	export COMPOSE_PROJECT_NAME
 
 	# remove the containers if they are already running using the injected COMPOSE_FILE
 	docker compose down
