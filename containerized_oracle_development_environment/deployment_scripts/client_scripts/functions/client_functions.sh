@@ -93,7 +93,7 @@ function proj_client_build_deploy_dev_environment ()
 		# declare environment variable string for the environment variables to be passed to the container host via the ssh call
 		local env_var_string="$(cds_shared_generate_ssh_env_vars_string "COMPOSE_PROJECT_NAME" "DB_HOST_PORT" "ORDS_HOST_PORT" "DB_IMAGE" "ORDS_IMAGE" "TARGET_APEX_VERSION" "APP_SCHEMA_NAME" "PRIV_USER" "ORACLE_PWD" "COMPOSE_FILE")"
 
-		echo "The value of the env_var_string is: ${env_var_string}"
+#		echo "The value of the env_var_string is: ${env_var_string}"
 
 		# declare the function arguments
 		local -A remote_deploy_args=(
@@ -263,7 +263,7 @@ function proj_client_shutdown_dev_environment ()
 		# declare environment variable string for the environment variables to be passed to the container host via the ssh call
 		local env_var_string="$(cds_shared_generate_ssh_env_vars_string "COMPOSE_PROJECT_NAME" "DB_HOST_PORT" "ORDS_HOST_PORT" "DB_IMAGE" "ORDS_IMAGE" "TARGET_APEX_VERSION" "APP_SCHEMA_NAME" "PRIV_USER" "COMPOSE_FILE" "REM_VOL")"
 
-		echo "The value of the env_var_string is: ${env_var_string}"
+#		echo "The value of the env_var_string is: ${env_var_string}"
 
 		# declare the function arguments
 		local -A remote_deploy_args=(
