@@ -49,6 +49,7 @@ function proj_host_deploy_container_elev_privs()
 			["compose_path"]="${COMPOSE_FILE}"
 			["build_path"]="${BUILD_PATH}"
 			["secret_name_prefix"]="${COMPOSE_PROJECT_NAME}_"
+			["rem_vol"]="${REM_VOL}"
 		)
 
 	echo "The argument array is: $(cds_shared_dump_array_vals "host_deploy_stack_args")"
@@ -104,9 +105,9 @@ function proj_host_shutdown_container_elev_privs()
 
 	# export the environment variables used directly in the docker compose files:
 	cds_shared_export_env_vars "DBPORT" "DBHOST" "DBSERVICENAME"
-
-	# shutdown the CODE containers to the host server
-	proj_shared_shutdown_CODE_containers "${BUILD_PATH}" "${COMPOSE_FILE}" "${REM_VOL}"
+	
+	# shutdown the CODE containers to the host server associated with the $STACK_NAME
+	cds_shared_remove_container_stack "${STACK_NAME}" "${NETWORK_NAME}" "${REM_VOL}"
 
 	echo "The containers have been shutdown"
 }

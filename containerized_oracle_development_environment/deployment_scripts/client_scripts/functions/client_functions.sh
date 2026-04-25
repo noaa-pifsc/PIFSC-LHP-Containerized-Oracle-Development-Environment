@@ -4,12 +4,15 @@
 # the function accepts the following arguments:
 # 1: passed env_name value (dev, test)
 # 2: passed deploy_dest: deployment destination value (local, server)
+# 3: rem_vol flag: (optional) remove the volumes associated with the docker stack name (yes) or retain them (no). This defaults to "no"
 function proj_client_deploy_container ()
 {
 	local env_var_name="env_name"
 	local dest_var_name="deploy_dest"
+	local rem_vol_var_name="rem_vol"
 	local passed_env_value="${1:-}"
 	local passed_deploy_value="${2:-}"
+	local passed_rem_vol="${3:-no}"
 	
 # 	echo "running proj_client_deploy_container(${1}, ${2})"
 	
@@ -25,13 +28,18 @@ function proj_client_deploy_container ()
 	# save/prompt for deployment destination (local, server) for Dual-Target capability
 	cds_client_set_deploy_dest_var "${dest_var_name}" "${passed_deploy_value}"
 
+	# save/prompt for remove volume flag (yes, no)
+	proj_client_set_rem_vol_var "${rem_vol_var_name}" "${passed_rem_vol_value}"
+
 	# notify the user of the user-defined runtime value
 	echo "Runtime Argument Values:"
 	echo "env_name: ${!env_var_name}"
 	echo "deploy_dest: ${!dest_var_name}"
+	echo "rem_vol: ${!rem_vol_var_name}"
+
 
 	# build/deploy the CODE container with the environment 
-	proj_client_build_deploy_dev_environment "${!env_var_name}" "${!dest_var_name}"
+	proj_client_build_deploy_dev_environment "${!env_var_name}" "${!dest_var_name}" "${!rem_vol_var_name}"
 
 	# notify the user that the container has finished executing
 	echo "The docker container has been deployed - environment name: ${!env_var_name}, deployment destination: ${!dest_var_name}"
@@ -42,11 +50,13 @@ function proj_client_deploy_container ()
 # the function accepts the following arguments:
 # 1: environment name (dev, test)
 # 2: deploy destination (local, server)
+# 3: rem_vol flag: (optional) remove the volumes associated with the docker stack name (yes) or retain them (no). This defaults to "no"
 function proj_client_build_deploy_dev_environment ()
 {
 	# build the list of compose files:
 	local env_name="${1}"
 	local deploy_dest="${2}"
+	local rem_vol="{3:-no}"
 	
 	# validate the bash variable values
 	if ! cds_shared_validate_required_vars "env_name" "deploy_dest" "BUILD_PATH" "ORDS_ENABLED"; then
@@ -87,6 +97,7 @@ function proj_client_build_deploy_dev_environment ()
 			["compose_path"]="${compose_file}"
 			["build_path"]="${BUILD_PATH}" 
 			["secret_name_prefix"]="${COMPOSE_PROJECT_NAME}_"
+			["rem_vol"]="${rem_vol}"
 		)
 
 		echo "The argument array is: $(cds_shared_dump_array_vals "deploy_args")"
@@ -104,9 +115,10 @@ function proj_client_build_deploy_dev_environment ()
 
 		# declare COMPOSE_FILE as an environment variable so it can be used in the container deployment
 		COMPOSE_FILE="${compose_file}"
+		REM_VOL="${rem_vol}"
 
 		# declare environment variable string for the environment variables to be passed to the container host via the ssh call
-		local env_var_string="$(cds_shared_generate_ssh_env_vars_string "COMPOSE_PROJECT_NAME" "DB_HOST_PORT" "ORDS_HOST_PORT" "DB_IMAGE" "ORDS_IMAGE" "TARGET_APEX_VERSION" "APP_SCHEMA_NAME" "PRIV_USER" "COMPOSE_FILE" "STACK_NAME" "NETWORK_NAME")"
+		local env_var_string="$(cds_shared_generate_ssh_env_vars_string "COMPOSE_PROJECT_NAME" "DB_HOST_PORT" "ORDS_HOST_PORT" "DB_IMAGE" "ORDS_IMAGE" "TARGET_APEX_VERSION" "APP_SCHEMA_NAME" "PRIV_USER" "COMPOSE_FILE" "STACK_NAME" "NETWORK_NAME" "REM_VOL")"
 
 #		echo "The value of the env_var_string is: ${env_var_string}"
 
@@ -163,16 +175,15 @@ function proj_client_get_compose_separator()
 # the function accepts the following arguments:
 # 1: passed env_name value (dev, test)
 # 2: passed deploy_dest: deployment destination value (local, server)
-# 3: passed rem_vol: flag to indicate if the associated volumes should be removed (yes) or not (no)
+# 3: passed rem_vol: flag to indicate if the associated volumes should be removed (yes) or not (no). This defaults to "no"
 function proj_client_shutdown_container ()
 {
 	local env_var_name="env_name"
 	local dest_var_name="deploy_dest"
 	local rem_vol_var_name="rem_vol"
-
 	local passed_env_value="${1:-}"
 	local passed_deploy_value="${2:-}"
-	local passed_rem_vol_value="${3:-}"
+	local passed_rem_vol_value="${3:-no}"
 	
 # 	echo "running proj_client_shutdown_container(${1}, ${2})"
 	
@@ -255,15 +266,15 @@ function proj_client_shutdown_dev_environment ()
 	
 	# check if this is a local or server deployment:
 	if [[ "${deploy_dest}" == "local" ]]; then
-		echo "This is a local deployment"
+		echo "Shutdown the local deployment (${COMPOSE_PROJECT_NAME})"
 
 		# export the environment variables used directly in the docker compose files:
 		cds_shared_export_env_vars "COMPOSE_PROJECT_NAME" "DB_HOST_PORT" "ORDS_HOST_PORT" "DB_IMAGE" "ORDS_IMAGE" "TARGET_APEX_VERSION" "APP_SCHEMA_NAME" "COMPOSE_FILE" "DBPORT" "DBHOST" "DBSERVICENAME" "STACK_NAME" "NETWORK_NAME"
 
-		# deploy the containers locally:
-		proj_shared_shutdown_CODE_containers "${BUILD_PATH}" "${compose_file}" "${rem_vol}"
+		# shutdown the CODE containers to the host server associated with the $STACK_NAME
+		cds_shared_remove_container_stack "${STACK_NAME}" "${NETWORK_NAME}" "${rem_vol}"
 	else
-		echo "This is a server deployment"
+		echo "Shutdown the server deployment (${COMPOSE_PROJECT_NAME})"
 		
 		# validate the bash variable values
 		if ! cds_shared_validate_required_vars "CONFIG_DIR" "HOSTNAME" "HOST_SOURCE_PATH" "GIT_URL" "HOST_SCRIPTS_PATH" "SECRET_DATA_VAR_NAME" "SECRET_MAPPING_VAR_NAME"; then
