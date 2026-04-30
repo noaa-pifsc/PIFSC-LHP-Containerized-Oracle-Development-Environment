@@ -60,7 +60,18 @@ function code_host_execute_container_scripts()
 
 
 # function that executes the specified script action (deploy or shutdown) on a given container host with a privileged account
-# This function accepts no parameters
+# This function accepts the following parameters as elements in the specified array name (arg_array): 
+# script_action: passed script_action value (deploy, shutdown)
+# stack_name: The container stack name
+# secret_map: the name of the configuration data variable that is passed via STDIN that contains secret values
+# build_path: the full path to the directory where the docker source files are located
+# compose_path: the formatted path (Windows or Linux) to the container compose file(s) (e.g. ./docker-compose.yml or file.yml:file2.yml)
+# network_name: The container network name
+# rem_vol: remove volume flag: remove the volumes associated with the docker stack name (yes) or retain them (no)
+# dbport: The internal container database port
+# dbhost: The internal container database name
+# dbservicename: The internal container database service name
+# secret_name_prefix: string to prepend to each secret name, this helps to prevent duplicate secret names during concurrent container deployments
 function code_host_execute_container_scripts_elev_privs()
 {
 	# store the function array argument
@@ -73,7 +84,7 @@ function code_host_execute_container_scripts_elev_privs()
     fi
 
 	# input validation:
-	if ! cds_shared_validate_required_array_vals "${arg_array}" "compose_path" "secret_map" "build_path" "stack_name" "network_name" "rem_vol" "dbport" "dbhost" "dbservicename"; then
+	if ! cds_shared_validate_required_array_vals "${arg_array}" "script_action" "compose_path" "secret_map" "build_path" "stack_name" "network_name" "rem_vol" "dbport" "dbhost" "dbservicename" "secret_name_prefix"; then
         echo "Error: ${FUNCNAME[0]}() function argument validation failed" >&2
         return 1
     fi
