@@ -26,6 +26,7 @@ function main()
 		["dbport"]="${DBPORT}"
 		["dbhost"]="${DBHOST}"
 		["dbservicename"]="${DBSERVICENAME}"
+		["script_action"]="${SCRIPT_ACTION}"
 	)
 
 	# deploy the container on the container host using a privileged account
