@@ -37,6 +37,8 @@ function main()
 		["config_dir"]="${CONFIG_DIR}"
 	)
 
+	echo "the code_client_process_arguments_execute_container_scripts() function arguments are: $(cds_shared_dump_array_vals "client_deploy_container_args")"
+
 	# deploy the containers for the development environment
 	code_client_process_arguments_execute_container_scripts "client_deploy_container_args"
 }
