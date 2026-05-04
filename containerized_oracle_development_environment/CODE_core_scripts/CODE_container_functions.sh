@@ -304,17 +304,19 @@ function proj_container_deploy_database_scripts ()
 
 #	echo "Running the custom database/apex deployment process"
 
-	# define a query to check if APEX is installed
-	APEX_QUERY="SELECT COUNT(*) FROM DBA_REGISTRY WHERE COMP_ID = 'APEX' AND STATUS = 'VALID';"
-
 	# Wait until the database is available
 	echo "Waiting for Oracle Database to be ready..."
-	until echo "exit" | sqlplus -s "${sys_credentials}" > /dev/null; do
+	
+	# Attempt to connect to the database container with the system credentials and run a select query (SELECT 1 FROM DUAL) that returns "1" if the query is successful. If the connection or query takes 5 or more seconds stop the query and loop again printing out the status notification message
+	until echo -e "SET HEADING OFF FEEDBACK OFF\nSELECT 1 FROM DUAL;\nexit;" | timeout 5s sqlplus -s -l "${sys_credentials}" 2>&1 | grep -qw "1"; do
+		# log that database query was not successfully processed, wait 5 seconds and try again
 		echo "Database not ready, waiting 5 seconds..."
 		sleep 5
 	done
+	
+	# log that the database is ready for the automated apex install/upgrade and custom schema/database object deployment
 	echo "Database is ready!"
-
+	
 	# install or upgrade the apex container installation (if target_apex_version is defined):
 	if [ -n "${arg_ref[target_apex_version]}" ]; then
 		echo "target_apex_version is defined, install/upgrade apex"

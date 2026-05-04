@@ -20,8 +20,6 @@ services:
     build:
       context: ..
       dockerfile: containerized_oracle_development_environment/Dockerfile.deploy
-    depends_on:
-      - code-db
     networks:
       - oracle-net
     volumes:

@@ -23,7 +23,7 @@
 ##### Database Configuration: #####
 
 	# container database host
-	declare DBHOST=database
+	declare DBHOST=code-db
 
 	# container database port
 	declare DBPORT=1521
