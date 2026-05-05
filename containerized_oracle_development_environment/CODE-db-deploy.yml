@@ -2,7 +2,10 @@ services:
   code-db:
     image: ${DB_IMAGE}
     ports: 
-      - ${DB_HOST_PORT}:${DBPORT}
+      - target: ${DBPORT}
+        published: ${DB_HOST_PORT}
+        protocol: tcp
+        mode: host
     hostname: ${DBHOST}
     networks:
       - oracle-net
