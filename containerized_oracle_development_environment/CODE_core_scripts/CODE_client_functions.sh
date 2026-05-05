@@ -207,7 +207,7 @@ function code_client_execute_container_scripts ()
 		fi
 
 		# export the environment variables based on the list of fields
-		cds_shared_export_array_keys "${arg_array}" "compose_project_name" "db_host_port" "ords_host_port" "db_image" "ords_image" "target_apex_version" "app_schema_name" "dbport" "dbhost" "dbservicename" "stack_name" "network_name"
+		cds_shared_export_array_keys "${arg_array}" "compose_project_name" "db_host_port" "ords_host_port" "db_image" "ords_image" "target_apex_version" "app_schema_name" "dbport" "dbhost" "dbservicename" "stack_name" "network_name" "ords_enabled"
 
 		# export additional custom environment variables
 		proj_client_custom_export_env_vars 
@@ -250,7 +250,7 @@ function code_client_execute_container_scripts ()
 		arg_ref["compose_file"]="${compose_file}"
 		
 		# define the global variables so they can be exported
-		local env_var_string="$(cds_shared_generate_ssh_env_vars_string_from_array_keys "${arg_array}" "compose_project_name" "db_host_port" "ords_host_port" "db_image" "ords_image" "target_apex_version" "app_schema_name" "priv_user" "compose_file" "stack_name" "network_name" "rem_vol" "script_action")"
+		local env_var_string="$(cds_shared_generate_ssh_env_vars_string_from_array_keys "${arg_array}" "compose_project_name" "db_host_port" "ords_host_port" "db_image" "ords_image" "target_apex_version" "app_schema_name" "priv_user" "compose_file" "stack_name" "network_name" "rem_vol" "script_action" "ords_enabled")"
 
 		# add the custom environment variables to the env_var_string variable
 		env_var_string+="$(proj_client_custom_string_env_vars)"

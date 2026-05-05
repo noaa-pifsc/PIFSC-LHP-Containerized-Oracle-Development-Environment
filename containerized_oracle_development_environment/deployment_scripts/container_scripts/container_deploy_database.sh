@@ -17,6 +17,7 @@ function main()
 			["app_schema_name"]="${APP_SCHEMA_NAME}"
 			["target_apex_version"]="${TARGET_APEX_VERSION}"
 			["oracle_pwd_file"]="${ORACLE_PWD_FILE}"
+			["ords_enabled"]="${ORDS_ENABLED}"
 		)
 
 	# Execute the database orchestration scripts, passing the secure vault by name

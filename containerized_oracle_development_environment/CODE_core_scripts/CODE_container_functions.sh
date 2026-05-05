@@ -276,6 +276,7 @@ function proj_container_check_apex_version_status()
 # app_schema_name: the schema name that is checked for existence on the database to determine if the database has already been initialized
 # target_apex_version: target version of apex that is being used by the ords container
 # oracle_pwd_file: the file location for the oracle admin password secret
+# ords_enabled: flag to indicate if the ords container is enabled (yes) or not (no)
 function proj_container_deploy_database_scripts ()
 {
 	# store the function array argument
@@ -288,7 +289,7 @@ function proj_container_deploy_database_scripts ()
     fi
 
 	# input validation:
-	if ! cds_shared_validate_required_array_vals "${arg_array}" "dbhost" "dbport" "dbservicename" "app_schema_name" "oracle_pwd_file"; then 
+	if ! cds_shared_validate_required_array_vals "${arg_array}" "dbhost" "dbport" "dbservicename" "app_schema_name" "oracle_pwd_file" "ords_enabled"; then 
         echo "Error: ${FUNCNAME[0]}() function argument validation failed" >&2
         return 1
     fi
@@ -317,12 +318,12 @@ function proj_container_deploy_database_scripts ()
 	# log that the database is ready for the automated apex install/upgrade and custom schema/database object deployment
 	echo "Database is ready!"
 	
-	# install or upgrade the apex container installation (if target_apex_version is defined):
-	if [ -n "${arg_ref[target_apex_version]}" ]; then
-		echo "target_apex_version is defined, install/upgrade apex"
+	# install or upgrade the apex container installation (if target_apex_version is defined and ords_enabled = yes):
+	if [[ "${arg_ref[ords_enabled]}" == "yes" && -n "${arg_ref[target_apex_version]}" ]]; then
+		echo "target_apex_version is defined and ORDS is enabled, install/upgrade apex"
 		proj_container_install_or_upgrade_apex "${sys_credentials}" "${sys_password}" "${arg_ref[target_apex_version]}" "${arg_ref[dbservicename]}"
 	else
-		echo "target_apex_version is not defined, skip apex install/upgrade process"
+		echo "target_apex_version is not defined or ORDS is not enabled, skip apex install/upgrade process"
 	fi
 
 	# apex has finished installing, create the /apex-static/.deploy_ready file to indicate that the ords container can start now:

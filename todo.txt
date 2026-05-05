@@ -1,9 +1,10 @@
 
 to do:
-	update the configuration so users can specify a unique container name so it won't conflict with other containers on the same server (could allow multiple people to use a different shared container host for development)
+	X update the configuration so users can specify a unique container name so it won't conflict with other containers on the same server (could allow multiple people to use a different shared container host for development)
 		e.g. GCP shared compute instance running docker, but it will depend on performance
 
-	_ for server deployments, should we omit the mount volumes altogether?
+	X for server deployments, should we omit the mount volumes altogether?
+		NO
 
 	X separate out the functionality into separate functions with defined naming convention
 		X create CODE core scripts that are reused across forks
@@ -53,18 +54,26 @@ to do:
 			* Not security hardened, encouraged not to work with sensitive data in a shared environment (anyone with docker privileges can connect to your containers and access the data within it)
 			
 		
-		_ the custom_container_config.sh configuration that is stored on the client machine is used when deploying to the server (passed via environment variables)
+		X the custom_container_config.sh configuration that is stored on the client machine is used when deploying to the server (passed via environment variables)
 		
-		docker swarm init to initialize docker swarm
+		X docker swarm init to initialize docker swarm
 	
-	_ update documentation
+		X secrets.sh will only set the oracle admin password on the initial DB container run, after that it is only used to connect to the database
+			X same goes for the data/app schema deployment scripts
+	
+		X new installations can take up to 30 minutes depending on the resources allocated to the docker host
+		
+		
+	
 		_ review the sections defined for CDD/CAD and implement the ones that are appropriate
-		_ naming conventions
-		_ implementation instructions
+		X naming conventions
+		X implementation instructions
+
+
 	X implement CDD/CDS functions where appropriate	
 		
 		
-	_ change the docker compose deploy and shutdown functions to use the list of .yml files with a "-f" flag before it
+	X change the docker compose deploy and shutdown functions to use the list of .yml files with a "-f" flag before it
 		
 		
 		
@@ -76,21 +85,21 @@ to do:
 		X resolving issue with mounted volume on a linux host (switch to named volume)
 	
 	
-	_ update boilerplate functions to separate them into the core_engine directory and make all variables arguments (no references to global configuration variables)
+	X update boilerplate functions to separate them into the core_engine directory and make all variables arguments (no references to global configuration variables)
 		* these functions are intended to be upgraded over time as requirements change or improvements are made
 		
 	
-	_ define boilerplate functions for CODE projects that are not intended to change across CODE forks
-		_ have these functions call the custom functions that will change across CODE forks
+	X define boilerplate functions for CODE projects that are not intended to change across CODE forks
+		X have these functions call the custom functions that will change across CODE forks
 	
 	
 	
 	
 	
 	
-	_ how to guarantee unique container naming so multiple CODE projects can run on the same server at the same time
-		_ need to also change the port number to avoid conflicts
-			_ make the updates custom_container_config.sh
+	X how to guarantee unique container naming so multiple CODE projects can run on the same server at the same time
+		X need to also change the port number to avoid conflicts
+			X make the updates custom_container_config.sh
 				COMPOSE_PROJECT_NAME
 				DB_HOST_PORT
 				ORDS_HOST_PORT
@@ -223,3 +232,88 @@ git bash commands:
 		bash ./deployment_scripts/client_scripts/client_execute_CODE_scripts.sh shutdown test server no
 
 troubleshooting tips:
+
+
+
+
+
+
+
+
+
+
+
+
+testing:
+	server:
+		deploy
+			test
+				installs db, ords, apex from scratch
+					_ verify ORDS/Apex login
+					_ verify DB connectivity
+
+				ORDS_ENABLED:
+					_ yes
+						validation:
+							_ decrease TARGET_APEX_VERSION
+							_ invalid TARGET_APEX_VERSION (format fails - 24.3.1)
+							_ incorrect TARGET_APEX_VERSION (does not exist - 24.6)
+					_ no
+
+			dev
+				installs db, ords, apex from scratch
+					_ verify ORDS/Apex login
+					_ verify DB connectivity
+						_ Create temp table and insert data
+				(same TARGET_APEX_VERSION) resume db, ords, apex
+					_ verify ORDS/Apex login
+					_ verify DB connectivity
+						_ verify temp table
+				(increase TARGET_APEX_VERSION) resume db, ords, apex
+					_ verify ORDS/Apex login
+					_ verify DB connectivity
+						_ verify temp table
+				ORDS_ENABLED:
+					_ yes
+						validation:
+							_ decrease TARGET_APEX_VERSION
+							_ invalid TARGET_APEX_VERSION (format fails - 24.3.1)
+							_ incorrect TARGET_APEX_VERSION (does not exist - 24.6)
+					_ no
+	
+	local:
+		deploy
+			test
+				installs db, ords, apex from scratch
+					_ verify ORDS/Apex login
+					_ verify DB connectivity
+				ORDS_ENABLED:
+					_ yes
+					_ no
+
+				validation:
+					_ decrease TARGET_APEX_VERSION
+					_ invalid TARGET_APEX_VERSION (format fails - 24.3.1)
+					_ incorrect TARGET_APEX_VERSION (does not exist - 24.6)
+			dev
+				installs db, ords, apex from scratch
+					_ verify ORDS/Apex login
+					_ verify DB connectivity
+						_ Create temp table and insert data
+				(same TARGET_APEX_VERSION) resume db, ords, apex
+					_ verify ORDS/Apex login
+					_ verify DB connectivity
+						_ verify temp table
+				(increase TARGET_APEX_VERSION) resume db, ords, apex
+					_ verify ORDS/Apex login
+					_ verify DB connectivity
+						_ verify temp table
+				ORDS_ENABLED:
+					_ yes
+						validation:
+							_ decrease TARGET_APEX_VERSION
+							_ invalid TARGET_APEX_VERSION (format fails - 24.3.1)
+							_ incorrect TARGET_APEX_VERSION (does not exist - 24.6)
+					_ no
+	
+		
