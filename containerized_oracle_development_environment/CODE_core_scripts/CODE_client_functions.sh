@@ -71,8 +71,18 @@ function code_client_process_arguments_execute_container_scripts ()
 	# save/prompt for deployment destination (local, server) for Dual-Target capability
 	cds_client_set_deploy_dest_var "${dest_var_name}" "${passed_deploy_value}"
 
-	# save/prompt for remove volume flag (yes, no)
-	cds_client_set_rem_vol_var "${rem_vol_var_name}" "${passed_rem_vol_value}"
+	# check the environment name
+	if [ "${!passed_env_value}" == "dev" ]; then
+		# this is the development environment
+	
+		# save/prompt for remove volume flag (yes, no)
+		cds_client_set_rem_vol_var "${rem_vol_var_name}" "${passed_rem_vol_value}"
+	else
+		# this is the test environment
+		
+		# set the rem_vol to yes to clear out the associated volumes (they are not intended to be retained in test scenarios)
+		cds_client_set_rem_vol_var "${rem_vol_var_name}" "yes"
+	fi
 
 	# notify the user of the user-defined runtime value
 	echo "Runtime Argument Values:"

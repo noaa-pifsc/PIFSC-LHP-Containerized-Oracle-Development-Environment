@@ -64,6 +64,10 @@ to do:
 		X new installations can take up to 30 minutes depending on the resources allocated to the docker host
 		
 		
+		_ when rem_vol = yes it will remove all volumes associated with the stack
+			_ when env_name = test then rem_vole = yes
+	
+		_ document the difference between dev and test scenarios
 	
 		_ review the sections defined for CDD/CAD and implement the ones that are appropriate
 		X naming conventions
@@ -92,6 +96,24 @@ to do:
 	X define boilerplate functions for CODE projects that are not intended to change across CODE forks
 		X have these functions call the custom functions that will change across CODE forks
 	
+	
+	
+	how do we handle the apex static volume?
+		test defines the apex static volume and ords volume
+			if the dev volumes were not removed then the apex static files will be there including the temp file that causes ords to start right away
+			solution: automatically clear the associated volumes when test version starts up
+		
+		dev defines all 3 volumes
+			when it restarts the apex static volume will still be there, so ords will start right away because of the temp file
+			
+			if a test run executes and then the dev executes again then the db volume will be there but the other 2 volumes won't be. 
+				Apex will be installed on the db and the script will detect the absence of the apex static files and copy those files again
+
+				_ * add a test case for this
+				
+
+			
+			
 	
 	
 	
@@ -249,61 +271,70 @@ Key:
 
 testing:
 	server:
-		deploy
-			test
-				installs db, ords, apex from scratch
-					_ verify ORDS/Apex login
-					_ verify DB connectivity
+		X deploy
+			X test
+				X installs db, ords, apex from scratch
+					X verify ORDS/Apex login
+					X verify DB connectivity
+						X Create temp table and insert data
 
-				ORDS_ENABLED:
-					_ yes
-						validation:
-							_ decrease TARGET_APEX_VERSION
-							_ invalid TARGET_APEX_VERSION (format fails - 24.3.1)
-							_ incorrect TARGET_APEX_VERSION (does not exist - 24.6)
-					_ no
+				X ORDS_ENABLED:
+					X yes
+						X validation:
+							X invalid TARGET_APEX_VERSION (format fails - 24.3.1)
+							X incorrect TARGET_APEX_VERSION (does not exist - 24.6)
+					X no
+						X verify DB connectivity
 
-			dev
-				_ installs db, ords, apex from scratch
-					_ verify ORDS/Apex login
-					_ verify DB connectivity
-						_ Create temp table and insert data
-				(same TARGET_APEX_VERSION) resume db, ords, apex
-					_ verify ORDS/Apex login
-					_ verify DB connectivity
-						_ verify temp table
-				(increase TARGET_APEX_VERSION) resume db, ords, apex
-					_ verify ORDS/Apex login
-					_ verify DB connectivity
-						_ verify temp table
-				ORDS_ENABLED:
-					_ yes
+			X dev
+				X installs db, ords, apex from scratch
+					X verify ORDS/Apex login
+					X verify DB connectivity
+						X Create temp table and insert data
+				X (same TARGET_APEX_VERSION) resume db, ords, apex
+					X verify ORDS/Apex login
+					X verify DB connectivity
+						X verify temp table
+				X (increase TARGET_APEX_VERSION) resume db, ords, apex
+					X verify ORDS/Apex login
+					X verify DB connectivity
+						X verify temp table
+				X ORDS_ENABLED:
+					X yes
 						validation:
-							_X decrease TARGET_APEX_VERSION
-							_ invalid TARGET_APEX_VERSION (format fails - 24.3.1)
-							_ incorrect TARGET_APEX_VERSION (does not exist - 24.6)
-					_ no
-				REM_VOL
+							X decrease TARGET_APEX_VERSION
+							X invalid TARGET_APEX_VERSION (format fails - 24.3.1)
+							X incorrect TARGET_APEX_VERSION (does not exist - 24.6)
+					X no
+						X verify DB connectivity
+				X REM_VOL
 					X yes - remove all volumes
 						X verify ORDS/Apex login
 						X verify DB connectivity
 							X Create temp table and insert data
 	
-	local:
-		deploy
-			test
-				installs db, ords, apex from scratch
-					_ verify ORDS/Apex login
-					_ verify DB connectivity
-				ORDS_ENABLED:
-					_ yes
-					_ no
+		X shutdown
+			X test
+			
+			X dev
+				X REM_VOL
+					X yes
+					X no
+	L local:
+		L deploy
+			L test
+				LV installs db, ords, apex from scratch
+					L verify ORDS/Apex login
+					L verify DB connectivity
+				L ORDS_ENABLED:
+					LV yes
+					L no
+						L verify DB connectivity
 
-				validation:
-					_ decrease TARGET_APEX_VERSION
-					_ invalid TARGET_APEX_VERSION (format fails - 24.3.1)
-					_ incorrect TARGET_APEX_VERSION (does not exist - 24.6)
-			L dev
+				L validation:
+					L invalid TARGET_APEX_VERSION (format fails - 24.3.1)
+					L incorrect TARGET_APEX_VERSION (does not exist - 24.6)
+			LV dev
 				LV installs db, ords, apex from scratch
 					LV verify ORDS/Apex login
 					LV verify DB connectivity
@@ -316,27 +347,24 @@ testing:
 					LV verify ORDS/Apex login
 					LV verify DB connectivity
 						LV verify temp table
-				L_V ORDS_ENABLED:
+				LV ORDS_ENABLED:
 					LV yes
 						LV validation:
 							LV decrease TARGET_APEX_VERSION
 							LV invalid TARGET_APEX_VERSION (format fails - 24.3.1)
 							LV incorrect TARGET_APEX_VERSION (does not exist - 24.6)
-					L no - ORDS container does not run
-						L verify DB connectivity
-				L_V REM_VOL
+					LV no - ORDS container does not run
+						LV verify DB connectivity
+				LV REM_VOL
 					LV yes - remove all volumes
-						L verify ORDS/Apex login
-						L verify DB connectivity
-							L Create temp table and insert data
-		shutdown
-			test
-				REM_VOL
-					_ yes
-					_ no
+						LV verify ORDS/Apex login
+						LV verify DB connectivity
+							LV Create temp table and insert data
+		L shutdown
+			L test
 			
-			L dev
-				L REM_VOL
-					L yes
-					L no
+			LV dev
+				LV REM_VOL
+					LV yes
+					LV no
 		
