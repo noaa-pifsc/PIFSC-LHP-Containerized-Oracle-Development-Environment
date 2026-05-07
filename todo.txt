@@ -455,10 +455,10 @@ testing:
 			1 (upgrade apex static files version only):
 				L deploy dev - version 23.2
 				
-				L test dev rem_vol = no
+				_L test dev rem_vol = no
 					install version 24.1
 				
-				_L deploy dev - version 24.1
+				_ deploy dev - version 24.1
 					upgrade database only, no need to install static files
 				
 			

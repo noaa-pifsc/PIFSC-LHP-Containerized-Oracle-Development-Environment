@@ -4,7 +4,7 @@
 # 1: first version in the format: [0-9]+(\.[0-9]+)+ 
 # 2: second version in the format: [0-9]+(\.[0-9]+)+ 
 # 3: Name of the variable to store the result of the comparison: contains 0 if $1 = $2, contains 1 if $1 > $2, contains 2 if $1 < $2
-function proj_container_version_compare() {
+function code_container_version_compare() {
 	version1="${1}"
 	version2="${2}"
 	local -n out_compare_result_ref="${3}"
@@ -48,7 +48,7 @@ function proj_container_version_compare() {
 # the function accepts the following parameters:
 # 1: the formatted system credentials for the container oracle database instance
 # 2: app_schema_name - the schema name that is checked for existence on the database to determine if the database has already been initialized
-function proj_container_check_database_initialized() {
+function code_container_check_database_initialized() {
 	local sys_credentials="${1}"
 	local app_schema_name="${2}"
 
@@ -65,7 +65,7 @@ function proj_container_check_database_initialized() {
 # function to validate the apex version using a regular expression
 # the function accepts the following parameters:
 # 1: target_version that is being validated using a regular expression
-function proj_container_validate_apex_version_format() {
+function code_container_validate_apex_version_format() {
 	local target_version="$1"
 
 	# validate the bash variable values
@@ -85,7 +85,7 @@ function proj_container_validate_apex_version_format() {
 # function to retrieve the currently installed apex version
 # the function accepts the following parameters:
 # 1: the formatted system credentials for the container oracle database instance
-function proj_container_get_installed_apex_version() {
+function code_container_get_installed_apex_version() {
 	local sys_credentials="${1}"
 	
 	# validate the bash variable values
@@ -121,7 +121,7 @@ EOF
 # the function accepts the following arguments:
 # 1: is the target apex version
 # 2: is the apex download URL that will be checked
-function proj_container_verify_apex_version_exists() {
+function code_container_verify_apex_version_exists() {
 
 	local apex_version="${1}"
 	local apex_download_url="${2}"
@@ -152,7 +152,7 @@ function proj_container_verify_apex_version_exists() {
 # 3: target_apex_version: the specified apex version for the ords container
 # 4: dbservicename: the service name for the database container
 # 5: deploy_id: the datestamp of the current deployment to uniquely identify it to the code-ords container
-function proj_container_install_or_upgrade_apex() {
+function code_container_install_or_upgrade_apex() {
 
 	local sys_credentials="${1}"
 	local sys_password="${2}"
@@ -178,7 +178,7 @@ function proj_container_install_or_upgrade_apex() {
 	local skip_db_install
 	local skip_file_install
 
-	# define the function arguments for proj_process_apex_version()
+	# define the function arguments for code_container_process_apex_version()
 	local -A process_apex_func_args=(
 			["target_apex_version"]="${target_apex_version}"
 			["apex_download_url"]="${apex_download_url}"
@@ -189,9 +189,9 @@ function proj_container_install_or_upgrade_apex() {
 		)
 
 	# process the apex version to determine which installations (if any) will be executed
-	proj_process_apex_version "process_apex_func_args"
+	code_container_process_apex_version "process_apex_func_args"
 	
-	# define the function arguments for proj_container_process_apex_install()
+	# define the function arguments for code_container_process_apex_install()
 	local -A install_upgrade_func_args=(
 			["skip_file_install"]="${skip_file_install}"
 			["skip_db_install"]="${skip_db_install}"
@@ -206,7 +206,7 @@ function proj_container_install_or_upgrade_apex() {
 		)
 
 	# process the apex install/upgrade
-	proj_container_process_apex_install "install_upgrade_func_args"
+	code_container_process_apex_install "install_upgrade_func_args"
 }
 
 # function to check the apex version to determine if the apex database upgrade 
@@ -217,7 +217,7 @@ function proj_container_install_or_upgrade_apex() {
 # apex_static_dir: the file directory for the apex static application files
 # out_skip_file_install_var_name: the variable name that will contain a 1 if the apex file upgrade should be skipped and 0 if the apex file upgrade should be installed
 # out_skip_db_install_var_name: the variable name that will contain a 1 if the apex DB upgrade should be skipped and 0 if the apex DB upgrade should be installed
-function proj_container_check_apex_version_status()
+function code_container_check_apex_version_status()
 {
 	# store the function array argument
 	local arg_array="${1}"
@@ -258,36 +258,22 @@ function proj_container_check_apex_version_status()
 		# update the variable to indicate the apex database upgrade should be skipped
 		out_skip_db_install_ref=1
 		
-		# Check if static files are also in place
-		if [ -f "${arg_ref[apex_static_dir]}/apex_version.txt" ]; then
-			# static Apex files are in place
+		# determine if the apex file installation should be processed and return the flag value (1|0) to out_skip_file_install_ref 
+		code_container_check_apex_file_install "out_skip_file_install_ref" "${arg_ref[apex_static_dir]}" "${arg_ref[target_apex_version]}"
 
-			echo "Apex files are in place, check if the version matches the target_apex_version"
-
-			# parse the apex version number for the static application files from the apex_version.txt static file
-			apex_static_files_ver=$(grep -oE '[0-9]+\.[0-9]+(\.[0-9]+)?' "${arg_ref[apex_static_dir]}/apex_version.txt")
-
-			echo "The value of the apex_static_files_ver is: ${apex_static_files_ver}" 
-
-			# check if the apex files version matches the target apex version
-			if [[ "${arg_ref[target_apex_version]}" == "${apex_static_files_ver}" ]]; then
-				# the apex files version is the same as the target apex version
-			
-				echo "The version of the Apex files and the target apex version are the same, do not install the apex static files"
-			
-				# update the variable to indicate the apex file upgrade should be skipped
-				out_skip_file_install_ref=1
-			else
-				echo "The version of the Apex static files is not the same as the target apex version, download and install the static files"
-			fi
-		fi
+		echo "The value of out_skip_file_install_ref is: ${out_skip_file_install_ref}"
 	else
 		# upgrade the apex version, target_apex_version is greater than the current_apex_version
 		# echo "DEBUG: Apex version mismatch. Found: '${arg_ref[current_apex_version]}'"
-		echo "Starting Apex upgrade to ${arg_ref[target_apex_version]}..."
+		echo "Starting DB Apex upgrade to ${arg_ref[target_apex_version]}..."
 		
 		# update the variable to indicate the apex database upgrade should be installed
 		out_skip_db_install_ref=0
+
+		# determine if the apex file installation should be processed and return the flag value (1|0) to out_skip_file_install_ref 
+		code_container_check_apex_file_install "out_skip_file_install_ref" "${arg_ref[apex_static_dir]}" "${arg_ref[target_apex_version]}"
+		
+		echo "The value of out_skip_file_install_ref is: ${out_skip_file_install_ref}"
 	fi
 }
 
@@ -302,7 +288,7 @@ function proj_container_check_apex_version_status()
 # oracle_pwd_file: the file location for the oracle admin password secret
 # ords_enabled: flag to indicate if the ords container is enabled (yes) or not (no)
 # deploy_id: the datestamp of the current deployment to uniquely identify it to the code-ords container
-function proj_container_deploy_database_scripts ()
+function code_container_deploy_database_scripts ()
 {
 	# store the function array argument
 	local arg_array="${1}"
@@ -346,14 +332,14 @@ function proj_container_deploy_database_scripts ()
 	# install or upgrade the apex container installation (if target_apex_version is defined and ords_enabled = yes):
 	if [[ "${arg_ref[ords_enabled]}" == "yes" && -n "${arg_ref[target_apex_version]}" ]]; then
 		echo "target_apex_version is defined and ORDS is enabled, install/upgrade apex"
-		proj_container_install_or_upgrade_apex "${sys_credentials}" "${sys_password}" "${arg_ref[target_apex_version]}" "${arg_ref[dbservicename]}" "${arg_ref[deploy_id]}"
+		code_container_install_or_upgrade_apex "${sys_credentials}" "${sys_password}" "${arg_ref[target_apex_version]}" "${arg_ref[dbservicename]}" "${arg_ref[deploy_id]}"
 	else
 		echo "target_apex_version is not defined or ORDS is not enabled, skip apex install/upgrade process"
 	fi
 
 #	echo "Checking if the database has been initialized (schema: ${APP_SCHEMA_NAME})..."
 	# Check if the database is initialized by querying DBA_USERS
-	if ! proj_container_check_database_initialized "${sys_credentials}" "${arg_ref[app_schema_name]}"; then
+	if ! code_container_check_database_initialized "${sys_credentials}" "${arg_ref[app_schema_name]}"; then
 		echo "Database is not initialized, run the custom database and/or application deployment scripts"
 
 		# run the custom database deployment scripts:
@@ -374,7 +360,7 @@ function proj_container_deploy_database_scripts ()
 # skip_db_install_var_name: the name of the variable that indicates if the apex database installation will be processed
 # skip_file_install_var_name: the name of the variable that indicates if the apex file installation will be processed
 # sys_credentials: formatted system database credentials
-function proj_process_apex_version()
+function code_container_process_apex_version()
 {
 	# store the function array argument
 	local arg_array="${1}"
@@ -399,21 +385,21 @@ function proj_process_apex_version()
 	local -n skip_file_install_var="${arg_ref[skip_file_install_var_name]}"
 
 	# Validate Apex version format (e.g., 23.2, 24.1), if it is invalid exit the function
-	proj_container_validate_apex_version_format "${arg_ref[target_apex_version]}"
+	code_container_validate_apex_version_format "${arg_ref[target_apex_version]}"
 
 	# validate if the specified target_apex_version version actually exists on Oracle's site
-	proj_container_verify_apex_version_exists "${arg_ref[target_apex_version]}" "${arg_ref[apex_download_url]}"
+	code_container_verify_apex_version_exists "${arg_ref[target_apex_version]}" "${arg_ref[apex_download_url]}"
 
 	# retrieve the current version of Apex by querying the databae
-	local current_apex_version="$(proj_container_get_installed_apex_version "${arg_ref[sys_credentials]}")"
+	local current_apex_version="$(code_container_get_installed_apex_version "${arg_ref[sys_credentials]}")"
 	
 	# echo "DEBUG: Current Apex version: ${current_apex_version}"
 
 	# compare the current and target versions of apex and store the return value in version_status
 	local version_status=""
-	proj_container_version_compare "${arg_ref[target_apex_version]}" "${current_apex_version}" "version_status"
+	code_container_version_compare "${arg_ref[target_apex_version]}" "${current_apex_version}" "version_status"
 	
-	# define the argument array for the proj_container_check_apex_version_status() function 
+	# define the argument array for the code_container_check_apex_version_status() function 
 	local -A apex_version_status_func_args=(
 			["version_status"]="${version_status}"
 			["current_apex_version"]="${current_apex_version}"
@@ -424,7 +410,7 @@ function proj_process_apex_version()
 		)
 	
 	# check the current/target version to determine if the DB and/or file apex installations should be executed
-	proj_container_check_apex_version_status "apex_version_status_func_args"
+	code_container_check_apex_version_status "apex_version_status_func_args"
 }
 
 # function that processes the apex db and file installation
@@ -439,7 +425,7 @@ function proj_process_apex_version()
 # dbservicename: the database service name for the database container
 # target_apex_version: the specified apex version for the ords container
 # deploy_id: the datestamp of the current deployment to uniquely identify it to the code-ords container
-function proj_container_process_apex_install()
+function code_container_process_apex_install()
 {
 	# store the function array argument
 	local arg_array="${1}"
@@ -457,7 +443,7 @@ function proj_container_process_apex_install()
 	fi
 	
 	
-	# echo "DEBUG: in proj_container_process_apex_install() the value of arg_array is: $(cds_shared_dump_array_vals ${arg_array})"
+	# echo "DEBUG: in code_container_process_apex_install() the value of arg_array is: $(cds_shared_dump_array_vals ${arg_array})"
 	
 	# create a pointer to the arg_array variable to make it easy to access the argument array values
 	local -n arg_ref="${arg_array}"
@@ -466,7 +452,7 @@ function proj_container_process_apex_install()
 	if [[ "${arg_ref[skip_file_install]}" -eq 0 || "${arg_ref[skip_db_install]}" -eq 0 ]]; then
 
 		# download and unzip the apex installer
-		code_download_unzip_apex_installer "${arg_ref[apex_download_url]}" "${arg_ref[apex_zip_path]}"
+		code_container_download_unzip_apex_installer "${arg_ref[apex_download_url]}" "${arg_ref[apex_zip_path]}"
 
 		# initialize the local variables to support the parallel installation of Apex in the DB and the file system (docker volume)
 		local db_install_pid=0
@@ -577,7 +563,7 @@ function code_container_install_apex_static_files ()
 # the function accepts the following parameters:
 # 1: apex_download_url: the dynamic download url for the specified apex version
 # 2: apex_zip_path: the path for the dynamic apex zip file local download
-function code_download_unzip_apex_installer()
+function code_container_download_unzip_apex_installer()
 {
 	local apex_download_url="${1}"
 	local apex_zip_path="${2}"
@@ -625,11 +611,11 @@ function code_container_configure_apex_admin()
         return 1
 	fi
 
-	# declare the variable to store the version status code returned by the proj_container_version_compare() function
+	# declare the variable to store the version status code returned by the code_container_version_compare() function
 	local version_status
 	
 	# check if the target apex version is less than 23.2
-	proj_container_version_compare "${target_apex_version}" "23.2" "version_status"
+	code_container_version_compare "${target_apex_version}" "23.2" "version_status"
 	
 	if [ "${version_status}" -eq 2 ]; then 
 		# apex version is 23.1 or less
@@ -734,4 +720,50 @@ EOF
 		exit 1
 	fi
 
+}
+
+
+# this function checks if the apex file version is the same as the target_apex_version, if so it will return out_skip_file_install=1 to indicate that the file installation should be skipped, if not it will return out_skip_file_install=0
+# the function accepts the following arguments:
+# 1: skip_file_install_var_name: the name of the variable to store the 
+# 2: 
+function code_container_check_apex_file_install ()
+{
+	local skip_file_install_var_name="${1}"
+	local apex_static_dir="${2}"
+	local target_apex_version="${3}"
+
+	# validate the bash variable values
+	if ! cds_shared_validate_required_vars "skip_file_install_var_name" "apex_static_dir" "target_apex_version"; then
+		echo "Error: ${FUNCNAME[0]}() function required bash variable validation failed" >&2
+		return 1
+	fi
+
+	# define a pointer to the local variable that indicates if the apex file installation should be skipped or not
+	local -n skip_file_install_ref="${1}"
+
+	# Check if static files are also in place
+	if [ -f "${arg_ref[apex_static_dir]}/apex_version.txt" ]; then
+		# static Apex files are in place
+
+		echo "Apex files are in place, check if the version matches the target_apex_version"
+
+		# parse the apex version number for the static application files from the apex_version.txt static file
+		apex_static_files_ver=$(grep -oE '[0-9]+\.[0-9]+(\.[0-9]+)?' "${arg_ref[apex_static_dir]}/apex_version.txt")
+
+		echo "The value of the apex_static_files_ver is: ${apex_static_files_ver}" 
+
+		# check if the apex files version matches the target apex version
+		if [[ "${arg_ref[target_apex_version]}" == "${apex_static_files_ver}" ]]; then
+			# the apex files version is the same as the target apex version
+		
+			echo "The version of the Apex files and the target apex version are the same, do not install the apex static files"
+		
+			# update the variable to indicate the apex file upgrade should be skipped
+			out_skip_file_install_ref=1
+		else
+			echo "The version of the Apex static files is not the same as the target apex version, download and install the static files"
+			out_skip_file_install_ref=0
+		fi
+	fi
 }

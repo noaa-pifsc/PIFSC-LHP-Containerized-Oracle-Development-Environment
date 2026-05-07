@@ -9,7 +9,7 @@ source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/includes/include_conta
 # main function definition to create a local array to specify the runtime function arguments:
 function main()
 {
-	# define the function arguments for proj_container_process_apex_install()
+	# define the function arguments for code_container_process_apex_install()
 	local -A deploy_database_scripts_func_args=(
 			["dbhost"]="${DBHOST}"
 			["dbport"]="${DBPORT}"
@@ -22,7 +22,7 @@ function main()
 		)
 
 	# Execute the database orchestration scripts, passing the secure vault by name
-	proj_container_deploy_database_scripts "deploy_database_scripts_func_args"
+	code_container_deploy_database_scripts "deploy_database_scripts_func_args"
 }
 
 # call the main function with all arguments sent to the calling script
