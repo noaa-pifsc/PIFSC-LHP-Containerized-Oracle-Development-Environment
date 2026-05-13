@@ -290,7 +290,7 @@ function code_client_execute_container_scripts ()
 
 # function to construct the compose file string for docker compose
 # the function accepts the following arguments:
-# 1: compose_file_var is the name of the compose file variable that will contain the 
+# 1: compose_file_var is the name of the compose file variable that will contain the formatted list of compose files
 # 2: env_name: the environment name (dev, test, prod)
 # 3: deploy_dest: deployment destination (local, server)
 # 4: ords_enabled: flag to indicate if the ords container is enabled

@@ -285,7 +285,7 @@ function code_container_check_apex_version_status()
 # dbservicename: database service name
 # app_schema_name: the schema name that is checked for existence on the database to determine if the database has already been initialized
 # target_apex_version: target version of apex that is being used by the ords container
-# oracle_admin_pwd_file: the file location for the oracle admin password secret
+# oracle_pwd_file: the file location for the oracle admin password secret
 # ords_enabled: flag to indicate if the ords container is enabled (yes) or not (no)
 # deploy_id: the datestamp of the current deployment to uniquely identify it to the code-ords container
 # db_scripts_map: the name of an array with each element containing encoded values with the "|" character as the delimiter: sql path (within container)|sql script file|User Secret Name|Password Secret Name
@@ -301,7 +301,7 @@ function code_container_deploy_database_scripts ()
     fi
 
 	# input validation:
-	if ! cds_shared_validate_required_array_vals "${arg_array}" "dbhost" "dbport" "dbservicename" "app_schema_name" "oracle_admin_pwd_file" "ords_enabled" "deploy_id" "db_scripts_map"; then 
+	if ! cds_shared_validate_required_array_vals "${arg_array}" "dbhost" "dbport" "dbservicename" "app_schema_name" "oracle_pwd_file" "ords_enabled" "deploy_id" "db_scripts_map"; then 
         echo "Error: ${FUNCNAME[0]}() function argument validation failed" >&2
         return 1
     fi
@@ -310,7 +310,7 @@ function code_container_deploy_database_scripts ()
 	local -n arg_ref="${arg_array}"
 
 	# store the oracle admin password in a local variable
-	local sys_password="$(cat ${arg_ref[oracle_admin_pwd_file]})"
+	local sys_password="$(cat ${arg_ref[oracle_pwd_file]})"
 	
 	# define the SYS credentials for use in deployment scripts based on environment variables:
 	local sys_credentials="SYS/${sys_password}@${arg_ref[dbhost]}:${arg_ref[dbport]}/${arg_ref[dbservicename]} as SYSDBA"
@@ -528,15 +528,10 @@ EOF
 	fi
 
 	# apex has finished installing, create the /apex-static/.deploy_read_${arg_ref[deploy_id]} file to indicate that the ords container can start now:
-<<<<<<<< HEAD:containerized_oracle_development_environment/CODE_core_scripts/functions/CODE_container_functions.sh
-	echo "Create the new deployment metadata file to indicate that the apex installation has completed: /apex-static/.deploy_ready_${arg_ref[deploy_id]}"
-	touch "/apex-static/.deploy_ready_${arg_ref[deploy_id]}"	
-========
 	echo "Create the new deployment metadata file to indicate that the apex installation has completed: /apex-static/deployments/.deploy_ready_${arg_ref[deploy_id]}"
 
 	mkdir -p "/apex-static/deployments/"	# create the deployments subfolder to not clutter up the apex static folder
 	touch "/apex-static/deployments/.deploy_ready_${arg_ref[deploy_id]}"	
->>>>>>>> dcf32322c863cf75362c7c0fea9cbb70c358e971:core/scripts/CODE_functions/CODE_container_functions.sh
 }
 
 # function that moves the static application files to the designated folder
@@ -708,7 +703,7 @@ function code_container_configure_apex_admin()
 	END;
 	/
 
-	-- Set the ADMIN password for the INTERNAL workspace (based on ORACLE_ADMIN_PWD variable)
+	-- Set the ADMIN password for the INTERNAL workspace (based on ORACLE_PWD variable)
 	BEGIN
 		DBMS_OUTPUT.PUT_LINE('Create the Apex admin user');
 	
@@ -725,7 +720,7 @@ function code_container_configure_apex_admin()
 
 		COMMIT;
 	EXCEPTION WHEN OTHERS THEN
-		-- If apex admin user already exists, just reset the password (based on ORACLE_ADMIN_PWD variable defined in .env file)
+		-- If apex admin user already exists, just reset the password (based on ORACLE_PWD variable defined in .env file)
 
 		-- Run the appropriate unlock/reset block
 		${UNLOCK_BLOCK}
@@ -802,7 +797,7 @@ function code_container_check_apex_file_install ()
 # 2: db_scripts_map: the name of an array with each element containing encoded values with the "|" character as the delimiter: sql path (within container)|sql script file|User Secret Name|Password Secret Name|Script Password Secret (optional when a password is injected into the script - examples include a CREATE USER command) 
 function code_container_deploy_custom_database_scripts()
 {
-	echo "running code_container_deploy_custom_database_scripts()"
+#	echo "running code_container_deploy_custom_database_scripts(${1}, ${2})"
 
 	# store the function array argument
 	local arg_array="${1}"
@@ -832,8 +827,6 @@ function code_container_deploy_custom_database_scripts()
 	# define a pointer for the db_scripts_map array:
 	local -n db_scripts_map_ref="${db_scripts_map}"
 
-
-
 	# loop through each of the database commands
 	for entry in "${db_scripts_map_ref[@]}"; do
 
@@ -860,17 +853,21 @@ function code_container_deploy_custom_database_scripts()
 		# construct the connection string:
 		local connection_string="${username}/${password}@${arg_ref[dbhost]}:${arg_ref[dbport]}/${arg_ref[dbservicename]}"
 
-		echo "Execute the SQL Script - The values are: ${script_path}, ${script_command}, ${user_secret_name}, ${pass_secret_name}"
+		echo "Execute the SQL Script - The values are: ${script_path}, ${script_command}, ${user_secret_name}, ${pass_secret_name}, ${pass_secret}"
 
 		# change to the script_path to run the script_command
 		cd "${script_path}"
 		
 # use sqlplus to run the current script_command		
 sqlplus -s /nolog <<EOF
-${script_command}
-${connection_string}
-${pass_secret}
+${script_command} "${connection_string}" "${pass_secret}"
 EOF
+	
+	# check return code for sqlplus query
+	if [ $? -ne 0 ]; then
+		echo "Error: SQL execution failed for ${script_command}"
+		return 1
+	fi	
 	
 	done
 }
