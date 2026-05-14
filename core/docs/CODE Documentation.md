@@ -305,9 +305,9 @@ For the following connections refer to the active [file-based configuration](#fi
 
 ## Security Features
 -   The CODE project inherits security features from the [CDS module](./modules/CDS/README.md#security-features).
--   Strict Local Variable Scoping (No Global Leakage): Within the container runtime, secret values are parsed directly into strictly scoped local associative arrays. Secret values are never stored in floating global variables or the container's exported environment, effectively shielding them from potential exposure via container introspection tools or error dumps.
+-   Secure In-Memory Data Transmission (STDIN): Secret values (like passwords and API keys) are never passed as command-line arguments. Instead, they are securely transmitted to remote servers, and between script calls, purely via standard input (STDIN / pipelining). This prevents sensitive data from appearing in process lists, system logs, or bash history files.
 -   Decoupled Configuration Adapter Pattern: The core CODE engine enforces a strict Separation of Concerns. It remains completely independent of project-specific global variables. It only operates on strictly validated associative arrays passed from the client adapter, ensuring that the engine itself cannot inadvertently expose or mishandle project-specific configurations.
--   Secure Connection String Generation: When dynamically generating database connection strings, the CODE framework retrieves values safely from the locally scoped secrets array and strictly quotes the passwords. This prevents special characters inside the database credentials from corrupting the connection string or breaking the SQL execution pipeline.
+-   Docker Secrets: Database credentials are defined as secrets and retrieved dynamically within the container to protect them from unauthorized access
 -   Immutable Shell Executions: When elevating privileges to run container commands, CODE utilizes rigid Heredocs (<<EOF) to pipe commands into the new shell. This creates an immutable execution block that safely separates the runtime variables from the raw secret payload.
 
 ## License
