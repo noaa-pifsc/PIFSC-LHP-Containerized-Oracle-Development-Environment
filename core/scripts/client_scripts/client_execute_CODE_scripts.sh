@@ -36,7 +36,7 @@ function main()
 		["secret_data_var_name"]="${SECRET_DATA_VAR_NAME}"
 		["config_dir"]="${CONFIG_DIR}"
 		["compose_file_array"]="COMPOSE_FILES"
-		["project_inheritance_var"]="PROJECT_INHERITANCE"
+		["project_linear_dependencies_var"]="PROJECT_LINEAR_DEPENDENCIES"
 		["projects_path"]="${PROJECTS_PATH}"
 		["logs_path"]="${LOGS_PATH}"
 	)

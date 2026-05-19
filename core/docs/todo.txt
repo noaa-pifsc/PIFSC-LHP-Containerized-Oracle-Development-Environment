@@ -17,7 +17,7 @@ to do:
 			X specify the parent folder name as a variable
 			X run a function to include the upstream parent configuration before the current configuration is loaded (recursive processing with array elements added after the recursive function is processed
 
-	_ print out the hierarchy for the user so they are aware of the inheritance relationship
+	X print out the hierarchy for the user so they are aware of the inheritance relationship
 		echo "***************"
 		echo "The project hierarchy, in order from parent to dependent fork is: 
 		echo "***************"
