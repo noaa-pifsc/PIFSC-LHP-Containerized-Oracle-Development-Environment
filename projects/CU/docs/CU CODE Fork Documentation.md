@@ -27,7 +27,7 @@ The PIFSC Containerized Oracle Developer Environment (CODE) project was develope
         -   folder path: [/projects/DSC/modules/DSC](../../DSC/modules/DSC) 
         -   Version Control Information:
             -   URL: <git@github.com:noaa-pifsc/PIFSC-DSC.git>
-    -   ### PRI Version Control Information
+    -   ### CU Version Control Information
         -   folder path: [/projects/CU/modules/CU](../modules/CU) 
         -   Version Control Information:
             -   URL: <git@picgitlab.nmfs.local:centralized-data-tools/centralized-utilities.git>
