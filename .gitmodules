@@ -1,12 +1,9 @@
-[submodule "modules/DSC"]
-	path = modules/DSC
-	url = git@picgitlab.nmfs.local:centralized-data-tools/pifsc-dsc.git
-[submodule "modules/CU"]
-	path = modules/CU
+[submodule "core/modules/CDS"]
+	path = core/modules/CDS
+	url = git@github.com:noaa-pifsc/PIFSC-Container-Deployment-System.git
+[submodule "projects/DSC/modules/DSC"]
+	path = projects/DSC/modules/DSC
+	url = git@github.com:noaa-pifsc/PIFSC-DSC.git
+[submodule "projects/CU/modules/CU"]
+	path = projects/CU/modules/CU
 	url = git@picgitlab.nmfs.local:centralized-data-tools/centralized-utilities.git
-[submodule "modules/CDS"]
-	path = modules/CDS
-	url = git@github.com:noaa-pifsc/PIFSC-Container-Deployment-Scripts.git
-[submodule "modules/LHP"]
-	path = modules/LHP
-	url = git@picgitlab.nmfs.local:lhp/lhp-data-management.git
