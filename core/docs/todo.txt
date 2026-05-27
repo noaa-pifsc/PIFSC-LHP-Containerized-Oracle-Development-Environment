@@ -92,9 +92,12 @@ to do:
 		
 		
 document:
-	_ update the documentation to move appropriate business rules into the business rules section and reference the business rules in the appropriate sections of the documentation
-	_ remove repetitive information when possible
-	_ identify missing aspects
+	X update the documentation to move appropriate business rules into the business rules section and 
+		X reference the business rules in the appropriate sections of the documentation
+			X implementing CODE 
+			X container architecture (ORDS_ENABLED and TARGET_APEX_VERSION should reference the file-based business rules)
+	X remove repetitive information when possible
+	X identify missing aspects
 
 	_ review the sections defined for CDD/CAD and implement the ones that are appropriate
 		
