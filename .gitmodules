@@ -7,3 +7,6 @@
 [submodule "projects/CU/modules/CU"]
 	path = projects/CU/modules/CU
 	url = git@picgitlab.nmfs.local:centralized-data-tools/centralized-utilities.git
+[submodule "projects/LHP/modules/LHP"]
+	path = projects/LHP/modules/LHP
+	url = git@github.com:noaa-pifsc/LHP-Data-Management.git

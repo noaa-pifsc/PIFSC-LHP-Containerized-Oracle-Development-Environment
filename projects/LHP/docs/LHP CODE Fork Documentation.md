@@ -1,0 +1,87 @@
+# PIFSC Life History Program Containerized Oracle Developer Environment
+
+## Overview
+The PIFSC Containerized Oracle Developer Environment (CODE) project was developed to provide a containerized Oracle development environment for PIFSC software developers. The Life History Program (LHP) data system was forked from the CODE project or a downstream forked CODE project to extend the CODE project's functionality and integrate LHP's dependencies. This repository can be forked to extend the existing functionality to any data systems that depend on the LHP for both development and testing purposes.
+
+## Resources
+-   ### Version Control Information
+    -   URL: <https://github.com/noaa-pifsc/PIFSC-LHP-Containerized-Oracle-Development-Environment>
+    -   Version: 1.1 (git tag: LHP_CODE_v1.1)
+    -   Upstream Repositories (in order from direct parent to top-level parent):
+        -   CU CODE Version Control Information:
+            -   URL: <https://github.com/noaa-pifsc/PIFSC-CU-Containerized-Oracle-Development-Environment>
+            -   Version: 1.1 (git tag: CU_CODE_v1.1)
+        -   DSC CODE Version Control Information:
+            -   URL: <https://github.com/noaa-pifsc/PIFSC-DSC-Containerized-Oracle-Development-Environment>
+            -   Version: 1.4 (git tag: DSC_CODE_v1.4)
+        -   CODE Version Control Information:
+            -   URL: <https://github.com/noaa-pifsc/PIFSC-Containerized-Oracle-Development-Environment>
+            -   Version: 1.4 (git tag: CODE_v1.4)
+
+## Intended Use
+-   Refer to the CODE [Intended Use](../../../../core/docs/CODE%20Documentation.md#intended-use) for details
+
+## Prerequisites
+-   Refer to the CODE [Prerequisites](../../../../core/docs/CODE%20Documentation.md#prerequisites) for details
+
+## Container Host Instances
+-   Refer to the CODE [Container Host Instances](../../../../core/docs/CODE%20Documentation.md#container-host-instances) for details
+
+## Dependencies
+-   Refer to the CODE [Dependencies](../../../../core/docs/CODE%20Documentation.md#dependencies) for details
+-   Custom Dependencies:
+    -   ### DSC Version Control Information
+        -   folder path: [/projects/DSC/modules/DSC](../../DSC/modules/DSC) 
+        -   Version Control Information:
+            -   URL: <git@github.com:noaa-pifsc/PIFSC-DSC.git>
+            -   Version 1.1 (git tag: dsc_db_v1.1)
+    -   ### CU Version Control Information
+        -   folder path: [/projects/CU/modules/CU](../../CU/modules/CU) 
+        -   Version Control Information:
+            -   URL: <git@picgitlab.nmfs.local:centralized-data-tools/centralized-utilities.git>
+            -   Database Version: 1.0 (Git tag: cen_utils_db_v1.0)
+    -   ### LHP Version Control Information
+        -   folder path: [/projects/LHP/modules/LHP](../../LHP/modules/LHP) 
+        -   Version Control Information:
+            -   URL: <git@github.com:noaa-pifsc/LHP-Data-Management.git>
+            -   Database Version:
+            -   Application Version: 
+
+## Container Architecture
+-   Refer to the CODE [Container Architecture](../../../../core/docs/CODE%20Documentation.md#container-architecture) for details
+
+## Naming Conventions
+-   Refer to the CODE [Repository Fork Diagram](../../../../core/docs/CODE%20Documentation.md#naming-conventions) for details
+
+## Repository Fork Diagram
+-   Refer to the CODE [Repository Fork Diagram](../../../../core/docs/CODE%20Documentation.md#repository-fork-diagram) for details
+
+# CODE Folder Structure
+-   Refer to the CODE [Folder Structure](../../../../core/docs/CODE%20Documentation.md#code-folder-structure) for details
+
+## CODE Business Rules
+-   Refer to the CODE [Business Rules](../../../../core/docs/CODE%20Documentation.md#code-business-rules) for details
+
+## CODE Implementation Procedure
+-   Refer to the CODE [Implementation Procedure](../../../../core/docs/CODE%20Documentation.md#code-implementation-procedure) for details
+
+## Setup
+-   Refer to the CODE [Setup](../../../../core/docs/CODE%20Documentation.md#setup) for details
+
+## Executing the CODE Project
+-   Refer to the [Executing the CODE Project](../../../../core/docs/CODE%20Documentation.md#executing-the-code-project) for details
+
+## Contribution and Repository Management Guidelines
+-   Refer to the [Contribution and Repository Management Guidelines](../../../../core/docs/CODE%20Documentation.md#contribution-and-repository-management-guidelines) for details
+
+## Monitoring and Syncing Upstream Updates
+-   Refer to the [Monitoring and Syncing Upstream Updates](../../../../core/docs/CODE%20Documentation.md#monitoring-and-syncing-upstream-updates) for details
+
+## Connection Information
+-   Refer to the CODE [Connection Information](../../../../core/docs/CODE%20Documentation.md/#connection-information) for details
+    -   The individual account passwords can be found in the /secrets/secrets.sh file 
+-   The LHP application can be accessed at the following URL (where \$\{ORDS_HOST_PORT\} is the matching value in the active [file-based runtime configuration](../../../core/docs/CODE%20Documentation.md#file-based)):
+    -   <http://localhost:${ORDS_HOST_PORT}/ords/f?p=LHP>
+
+## Security Features
+-   Refer to the CODE [Security Features](../../../../core/docs/CODE%20Documentation.md#security-features) for details
