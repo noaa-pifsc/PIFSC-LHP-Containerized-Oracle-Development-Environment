@@ -43,7 +43,7 @@ This project was created to provide a containerized Oracle developer environment
         -   secrets/secrets.sh defines the credentials for the database schemas and any other endpoints (e.g. API keys)
             -   This is a cumulative file for all dependencies that is not managed in version control
             -   Used to define the credentials for the database objects and also to connect to deploy the appropriate database objects
-            -   show the secrets.template.sh
+            -   * show the secrets.template.sh
         -   (pause for any questions)
     -   CODE Business Rules
         -   This defines how the behavior of the application is driven by configuration files and allows custom code to be injected for a given forked project using hooks for specific scopes and timing
