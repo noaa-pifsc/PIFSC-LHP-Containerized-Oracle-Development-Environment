@@ -16,3 +16,15 @@ DSC_PWD='YOUR_DSC_PASSWORD'
 DB_CU_USER="CEN_UTILS"
 DB_CU_PASSWORD='YOUR_CEN_UTILS_PASSWORD'
 
+# define LHP data schema credentials
+LHP_DB_USER="LIFEHIST"
+LHP_DB_PWD='YOUR_PASSWORD'
+
+# define LHP application schema credentials
+LHP_APP_USER="LIFEHIST_APP"
+LHP_APP_PWD='YOUR_PASSWORD'
+
+# define LHP apex developer account username/password
+LHP_APX_USER="APEX_DEVELOPER_USERNAME"
+LHP_APX_PWD='YOUR_PASSWORD'
+

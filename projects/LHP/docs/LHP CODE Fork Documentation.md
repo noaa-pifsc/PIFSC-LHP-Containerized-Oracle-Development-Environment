@@ -44,8 +44,8 @@ The PIFSC Containerized Oracle Developer Environment (CODE) project was develope
         -   folder path: [/projects/LHP/modules/LHP](../../LHP/modules/LHP) 
         -   Version Control Information:
             -   URL: <git@github.com:noaa-pifsc/LHP-Data-Management.git>
-            -   Database Version:
-            -   Application Version: 
+            -   Database Version: 2.0 (git tag: lhp_data_mgmt_db_v2.0)
+            -   Application Version: 2.0 (git tag: lhp_data_mgmt_app_v2.0)
 
 ## Container Architecture
 -   Refer to the CODE [Container Architecture](../../../../core/docs/CODE%20Documentation.md#container-architecture) for details
