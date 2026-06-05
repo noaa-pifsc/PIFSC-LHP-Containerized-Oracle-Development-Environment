@@ -18,7 +18,6 @@ The PIFSC Containerized Oracle Developer Environment (CODE) framework was develo
     -   [Scenario 2 Diagram](./diagrams/CODE%20dev%20workflow%20diagram%20scenario%202.drawio.png)
         -   [Scenario 2 Diagram source code](./diagrams/CODE%20dev%20workflow%20diagram%20scenario%202.drawio)
 
-
 ## Intended Use
 -   The CODE project is NOT intended for production use, it was developed to provide a containerized development and testing environment. There has been no rigorous security hardening process that complies with federal security requirements. 
 -   The CODE project can be used to develop and test features and applications without requiring System Administrator support. The user specifies the administrator passwords when the container is run so they can make system-level configuration changes directly in the database or ORDS containers and then provide the working configuration settings to the System Administrator for implementation in the enterprise test and production environments.
