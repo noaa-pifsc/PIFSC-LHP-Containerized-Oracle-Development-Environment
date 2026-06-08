@@ -417,6 +417,7 @@ The PIFSC Containerized Oracle Developer Environment (CODE) framework was develo
     -   Make the data model changes to the development database and save the corresponding DDL in an upgrade file
     -   Periodically deploy the test CODE instance deployment that runs the DDL upgrade file 
     -   Use a database diff tool (e.g. SQL Developer) between the development and test instances to ensure the data models are equivalent
+    -   Shutdown test instance when not actively in use to conserve resources
 
 ## Monitoring and Syncing Upstream Updates
 -   Because the upstream engine (CODE) and project forks are hosted on GitHub, maintaining clear synchronization lines is key to pulling upstream features, bug fixes, and security patches seamlessly.
