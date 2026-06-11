@@ -15,8 +15,8 @@ The PIFSC Containerized Oracle Developer Environment (CODE) project was develope
 ## Intended Use
 -   Refer to the CODE [Intended Use](../../../../core/docs/CODE%20Documentation.md#intended-use) for details
 
-## Prerequisites
--   Refer to the CODE [Prerequisites](../../../../core/docs/CODE%20Documentation.md#prerequisites) for details
+## Requirements
+-   Refer to the CODE [Requirements](../../../../core/docs/CODE%20Documentation.md#requirements) for details
 
 ## Container Host Instances
 -   Refer to the CODE [Container Host Instances](../../../../core/docs/CODE%20Documentation.md#container-host-instances) for details
@@ -62,3 +62,8 @@ The PIFSC Containerized Oracle Developer Environment (CODE) project was develope
 
 ## Security Features
 -   Refer to the CODE [Security Features](../../../../core/docs/CODE%20Documentation.md#security-features) for details
+
+## Design Strategy
+-   Refer to the [CODE Design Strategy](../../../../core/docs/CODE%20Documentation.md#design-strategy) documentation
+    -   Benefits:
+        -   Reduce the amount of custom code needed to deploy this CODE fork
